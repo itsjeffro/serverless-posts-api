@@ -1,18 +1,56 @@
 'use strict';
 
-module.exports.hello = async event => {
+module.exports.getPosts = async event => {
   return {
     statusCode: 200,
     body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
+      [],
       null,
       2
     ),
   };
+}
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-};
+module.exports.getPost = async event => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+      {},
+      null,
+      2
+    ),
+  };
+}
+
+module.exports.createPost = async event => {
+  return {
+    statusCode: 201,
+    body: JSON.stringify(
+      {},
+      null,
+      2
+    ),
+  };
+}
+
+module.exports.updatePost = async event => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+      {},
+      null,
+      2
+    ),
+  };
+}
+
+module.exports.deletePost = async event => {
+  return {
+    statusCode: 204,
+    body: JSON.stringify(
+      null,
+      null,
+      2
+    ),
+  };
+}

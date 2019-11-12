@@ -6,12 +6,38 @@ provider:
   region: ap-southeast-2
 
 functions:
-  posts:
-    handler: handler.hello
+  getPosts:
+    handler: handler.getPosts
     events:
       - http:
           path: posts
           method: get
-          cors:
-            origin: '*'
-            maxAge: 86400
+          cors: true
+  getPost:
+    handler: handler.getPost
+    events:
+      - http:
+          path: posts/{uuid}
+          method: get
+          cors: true
+  createPost:
+    handler: handler.createPost
+    events:
+      - http:
+          path: posts
+          method: post
+          cors: true
+  updatePost:
+    handler: handler.updatePost
+    events:
+      - http:
+          path: posts/{uuid}
+          method: put
+          cors: true
+  deletePost:
+    handler: handler.deletePost
+    events:
+      - http:
+          path: posts/{uuid}
+          method: delete
+          cors: true
