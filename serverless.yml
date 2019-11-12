@@ -1,0 +1,17 @@
+service: itsjeffro
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: ap-southeast-2
+
+functions:
+  posts:
+    handler: handler.hello
+    events:
+      - http:
+          path: posts
+          method: get
+          cors:
+            origin: '*'
+            maxAge: 86400
