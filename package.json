@@ -1,0 +1,26 @@
+{
+  "name": "serverless-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsjeffro/serverless-demo.git"
+  },
+  "author": "Jeff Nielsen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/itsjeffro/serverless-demo/issues"
+  },
+  "homepage": "https://github.com/itsjeffro/serverless-demo#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "mysql2": "^2.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
+  }
+}
