@@ -1,0 +1,21 @@
+name: Serverless Demo
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v1
+      - name: Use Node JS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.16.3'
+      - name: Build
+        run: |
+          npm install
+          npm run test
