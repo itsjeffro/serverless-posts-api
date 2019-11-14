@@ -13,6 +13,8 @@ functions:
           path: posts
           method: get
           cors: true
+          private: true
+
   getPost:
     handler: handler.getPost
     events:
@@ -20,6 +22,8 @@ functions:
           path: posts/{uuid}
           method: get
           cors: true
+          private: true
+
   createPost:
     handler: handler.createPost
     events:
@@ -27,6 +31,8 @@ functions:
           path: posts
           method: post
           cors: true
+          private: true
+
   updatePost:
     handler: handler.updatePost
     events:
@@ -34,6 +40,8 @@ functions:
           path: posts/{uuid}
           method: put
           cors: true
+          private: true
+
   deletePost:
     handler: handler.deletePost
     events:
@@ -41,3 +49,4 @@ functions:
           path: posts/{uuid}
           method: delete
           cors: true
+          private: true
