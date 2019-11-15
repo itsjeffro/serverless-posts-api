@@ -5,8 +5,15 @@ provider:
   runtime: nodejs10.x
   region: ap-southeast-2
   apiName: itsjeffro
+  usagePlan:
+    throttle:
+      burstLimit: 5
+      rateLimit: 1
 
 functions:
+  authorizer:
+    handler: handler.authorizer
+
   getPosts:
     handler: handler.getPosts
     events:
@@ -14,6 +21,7 @@ functions:
           path: posts
           method: get
           cors: true
+          authorizer: authorizer
           private: true
 
   getPost:
@@ -23,6 +31,7 @@ functions:
           path: posts/{uuid}
           method: get
           cors: true
+          authorizer: authorizer
           private: true
 
   createPost:
@@ -32,6 +41,7 @@ functions:
           path: posts
           method: post
           cors: true
+          authorizer: authorizer
           private: true
 
   updatePost:
@@ -41,6 +51,7 @@ functions:
           path: posts/{uuid}
           method: put
           cors: true
+          authorizer: authorizer
           private: true
 
   deletePost:
@@ -50,4 +61,5 @@ functions:
           path: posts/{uuid}
           method: delete
           cors: true
+          authorizer: authorizer
           private: true
