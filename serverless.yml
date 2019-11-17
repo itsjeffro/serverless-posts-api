@@ -12,7 +12,7 @@ provider:
 
 functions:
   authorizer:
-    handler: handler.authorizer
+    handler: handlers/authorizer.authorizer
 
   getPosts:
     handler: handler.getPosts
