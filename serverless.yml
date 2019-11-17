@@ -15,7 +15,7 @@ functions:
     handler: handlers/authorizer.authorizer
 
   getPosts:
-    handler: handler.getPosts
+    handler: handlers/posts.getPosts
     events:
       - http:
           path: posts
@@ -25,7 +25,7 @@ functions:
           private: true
 
   getPost:
-    handler: handler.getPost
+    handler: handlers/posts.getPost
     events:
       - http:
           path: posts/{uuid}
@@ -35,7 +35,7 @@ functions:
           private: true
 
   createPost:
-    handler: handler.createPost
+    handler: handlers/posts.createPost
     events:
       - http:
           path: posts
@@ -45,7 +45,7 @@ functions:
           private: true
 
   updatePost:
-    handler: handler.updatePost
+    handler: handlers/posts.updatePost
     events:
       - http:
           path: posts/{uuid}
@@ -55,7 +55,7 @@ functions:
           private: true
 
   deletePost:
-    handler: handler.deletePost
+    handler: handlers/posts.deletePost
     events:
       - http:
           path: posts/{uuid}
