@@ -3,11 +3,14 @@ let jwt = require('jsonwebtoken');
 module.exports.authorizer = (event, context, callback) => {
   try {
     let token = event.authorizationToken;
-    let decoded = jwt.verify(token, process.env.JWT_SIGNING_KEY);
+    let decodedToken = jwt.verify(token, process.env.JWT_SIGNING_KEY);
+    let effect = 'Allow';
 
-    // Check scopes to determine if user is unauthorized
+    if (!decodedToken.hasOwnProperty('scopes')) {
+      return callback('Unauthorized');
+    }
     
-    return callback(null, generatePolicy('Allow', event));
+    return callback(null, generatePolicy(effect, event, decodedToken));
   } catch (e) {
     return callback("Error: Invalid token");
   }
@@ -16,10 +19,11 @@ module.exports.authorizer = (event, context, callback) => {
 /**
  * Returns policy.
  *
- * @param {string} effect 
- * @param {object} event 
+ * @param {string} effect
+ * @param {object} event
+ * @param {object} decodedToken
  */
-function generatePolicy(effect, event) {
+function generatePolicy(effect, event, decodedToken) {
   return {
     "principalId": "user", 
     "policyDocument": {
@@ -32,6 +36,6 @@ function generatePolicy(effect, event) {
         }
       ]
     },
-    "context": {}
+    "context": decodedToken
   };
 }
