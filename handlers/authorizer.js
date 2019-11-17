@@ -36,6 +36,10 @@ function generatePolicy(effect, event, decodedToken) {
         }
       ]
     },
-    "context": decodedToken
+    "context": {
+      "issuer": decodedToken.iss,
+      "user": decodedToken.sub,
+      "company": decodedToken.company
+    }
   };
 }
