@@ -1,6 +1,6 @@
 let jwt = require('jsonwebtoken');
 
-module.exports.authorizer = (event, context, callback) => {
+module.exports.authorizer = async (event, context, callback) => {
   try {
     let token = event.authorizationToken;
     let decodedToken = jwt.verify(token, process.env.JWT_SIGNING_KEY);
