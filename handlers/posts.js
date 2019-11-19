@@ -22,10 +22,21 @@ module.exports.getPosts = async (event) => {
       if (error) {
         throw error;
       }
+
+      let authorizerContext = event.requestContext.authorizer;
+
+      let data = {
+        meta: {
+          company: authorizerContext.company,
+          user: authorizerContext.user,
+          application: authorizerContext.issuer
+        },
+        data: rows
+      };
       
       resolve({
         statusCode: 200,
-        body: JSON.stringify(rows),
+        body: JSON.stringify(data),
       });
     });
   });
