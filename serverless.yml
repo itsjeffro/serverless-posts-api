@@ -63,3 +63,11 @@ functions:
           cors: true
           authorizer: authorizer
           private: true
+
+resources: 
+  Resources: 
+    PostsTopic: 
+      Type: AWS::SNS::Topic 
+      Properties: 
+        DisplayName: 'Posts Topic' 
+        TopicName: PostsTopic
