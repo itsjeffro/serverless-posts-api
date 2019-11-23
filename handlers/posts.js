@@ -23,7 +23,11 @@ module.exports.getPosts = async (event) => {
         throw error;
       }
 
-      let authorizerContext = event.requestContext.authorizer;
+      let authorizerContext;
+
+      if (event.requestContext && event.requestContext.authorizer) {
+        authorizerContext = event.requestContext.authorizer;
+      }
 
       let data = {
         meta: {
