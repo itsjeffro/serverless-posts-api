@@ -17,33 +17,35 @@ module.exports.getPosts = async (event) => {
     }
   });
   
-  return new Promise((resolve, reject) => {
+  let rows = await new Promise((resolve, reject) => {
     connection.execute("SELECT * FROM posts", (error, rows, fields) => {
       if (error) {
         throw error;
       }
 
-      let authorizerContext;
-
-      if (event.requestContext && event.requestContext.authorizer) {
-        authorizerContext = event.requestContext.authorizer;
-      }
-
-      let data = {
-        meta: {
-          company: authorizerContext.company,
-          user: authorizerContext.user,
-          application: authorizerContext.issuer
-        },
-        data: rows
-      };
-      
-      resolve({
-        statusCode: 200,
-        body: JSON.stringify(data),
-      });
+      resolve(rows);
     });
   });
+
+  let authorizerContext = {};
+
+  if (event.requestContext && event.requestContext.authorizer) {
+    authorizerContext = event.requestContext.authorizer;
+  }
+
+  let data = {
+    meta: {
+      company: authorizerContext.company || "",
+      user: authorizerContext.user || "",
+      application: authorizerContext.issuer || ""
+    },
+    data: rows
+  };
+  
+  return {
+    statusCode: 200,
+    body: JSON.stringify(data),
+  };
 };
 
 /**
