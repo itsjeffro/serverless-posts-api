@@ -17,7 +17,7 @@ jobs:
           node-version: '10.16.3'
       - name: Build
         run: |
-          npm install
+          npm install --production
       - name: Serverless deploy
         uses: serverless/github-action@master 
         with:
