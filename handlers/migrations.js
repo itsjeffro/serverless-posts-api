@@ -5,9 +5,9 @@ const exec = require('child_process').exec;
  * Process migrations.
  */
 module.exports.process = (event) => {
-  let knexBin = path.resolve(__dirname, './../node_modules/.bin/knex');
+  let knexBin = process.env.LAMBDA_TASK_ROOT + '/node_modules/.bin/knex';
 
-  console.log('COMMAND: ' + knexBin);
+  console.log('Command path: ' + knexBin);
 
   exec(knexBin + ' migrate:latest', (error, stdout, stderr) => {
     if (error) {
