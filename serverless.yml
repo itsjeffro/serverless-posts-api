@@ -64,6 +64,9 @@ functions:
           authorizer: authorizer
           private: true
 
+  migrationProcess:
+    handler: handlers/migrations.process
+
 resources: 
   Resources: 
     PostsTopic: 
