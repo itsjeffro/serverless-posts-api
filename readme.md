@@ -8,6 +8,12 @@ This project was created as a learning exercise for an internal API microservice
 
 ### Testing with Serverless
 
+#### Migrations
+
+```
+serverless invoke local --function migrationProcess -e DB_HOST=<host> -e DB_USER=root -e DB_PASSWORD=<password> -e DB_PORT=3306 -e DB_DATABASE=<database>
+```
+
 #### Authorizer
 
 ```
