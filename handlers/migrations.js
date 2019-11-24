@@ -7,6 +7,8 @@ const { exec } = require('child_process')
 module.exports.process = async (event) => {
   let knexCommand = path.resolve(__dirname, './../node_modules/.bin/knex');
 
+  console.log('COMMAND: ' + knexCommand);
+
   exec(knexCommand + ' migrate:latest', (error, stdout, stderr) => {
     if (error) {
       console.error(error);
