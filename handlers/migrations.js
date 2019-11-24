@@ -1,20 +1,28 @@
 const path = require('path');
-const { exec } = require('child_process')
+const exec = require('child_process').exec;
+const fs = require('fs')
 
 /**
  * Process migrations.
  */
 module.exports.process = async (event) => {
-  let knexCommand = path.resolve(__dirname, './../node_modules/.bin/knex');
+  let knexBin = path.resolve(__dirname, './../node_modules/.bin/knex');
 
-  console.log('COMMAND: ' + knexCommand);
+  console.log('COMMAND: ' + knexBin);
 
-  exec(knexCommand + ' migrate:latest', (error, stdout, stderr) => {
+  fs.access(knexBin, fs.F_OK, (error) => {
     if (error) {
-      console.error(error);
-    } else {
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
+      throw 'File does not exist in path';
     }
+  
+    exec(knexBin + ' migrate:latest', (error, stdout, stderr) => {
+      if (error) {
+        console.error(error);
+      } else if (stdout) {
+        console.log(`stdout: ${stdout}`);
+      } else {
+        console.log(`stderr: ${stderr}`);
+      }
+    });
   });
 };
