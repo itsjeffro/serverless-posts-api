@@ -1,21 +1,37 @@
-const path = require('path');
-const exec = require('child_process').exec;
+const knexfile = require('../knexfile');
+const knex = require('knex/knex');
+
+const {
+  mkConfigObj,
+  resolveKnexFilePath,
+  resolveEnvironmentConfig,
+  exit,
+  success,
+  checkLocalModule,
+  getMigrationExtension,
+  getSeedExtension,
+  getStubPath,
+} = require('knex/bin/utils/cli-config-utils');
 
 /**
  * Process migrations.
  */
 module.exports.process = (event) => {
-  let knexBin = process.env.LAMBDA_TASK_ROOT + '/node_modules/.bin/knex';
+  let env = {};
 
-  console.log('Command path: ' + knexBin);
+  env.configuration = knexfile;
 
-  exec(knexBin + ' migrate:latest', (error, stdout, stderr) => {
-    if (error) {
-      console.error(error);
-    } else if (stdout) {
-      console.log(`stdout: ${stdout}`);
-    } else {
-      console.log(`stderr: ${stderr}`);
-    }
-  });
+  const resolvedConfig = resolveEnvironmentConfig({}, env.configuration);
+
+  return knex(resolvedConfig)
+    .migrate
+    .latest()
+    .then(([batchNo, log]) => {
+      if (log.length === 0) {
+        console.log('Already up to date');
+      }
+
+      success(`Batch ${batchNo} run: ${log.length} migrations` + log.join('\n'));
+    })
+    .catch(exit);
 };
