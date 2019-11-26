@@ -16,22 +16,28 @@ const {
 /**
  * Process migrations.
  */
-module.exports.process = (event) => {
+module.exports.process = (event, context, callback) => {
   let env = {};
 
   env.configuration = knexfile;
 
   const resolvedConfig = resolveEnvironmentConfig({}, env.configuration);
 
-  return knex(resolvedConfig)
+  knex(resolvedConfig)
     .migrate
     .latest()
     .then(([batchNo, log]) => {
+      let message = '';
+
       if (log.length === 0) {
-        console.log('Already up to date');
+        message += 'Already up to date. ';
       }
 
-      success(`Batch ${batchNo} run: ${log.length} migrations` + log.join('\n'));
+      message += `Batch ${batchNo} run: ${log.length} migrations` + log.join('\n');
+
+      callback(null, message);
     })
-    .catch(exit);
+    .catch((text) => {
+      callback(Error(text));
+    });
 };
