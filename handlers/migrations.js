@@ -36,7 +36,7 @@ module.exports.process = async (event, context, callback) => {
   
         message += `Batch ${batchNo} run: ${log.length} migrations` + log.join('\n');
   
-        resolve(null, message);
+        resolve(message);
       })
       .catch((text) => {
         reject(Error(text));
