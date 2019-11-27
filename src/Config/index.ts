@@ -1,9 +1,11 @@
-class Config {
-  constructor(items) {
+module.exports = class Config {
+  public items: any;
+
+  public constructor(items: any) {
     this.items = items;
   }
 
-  get(key, defaultValue) {
+  public get(key?: string, defaultValue?: string) {
     // If no key is provided, then return all set items.
     if (key === undefined) {
       return this.items;
@@ -35,5 +37,3 @@ class Config {
     return items;
   }
 }
-
-module.exports = Config;
