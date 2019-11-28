@@ -1,6 +1,6 @@
 let jwt = require('jsonwebtoken');
 
-module.exports.authorizer = async (event, context, callback) => {
+module.exports.authorizer = async (event: any, context: any, callback: any) => {
   try {
     let token = event.authorizationToken;
     let decodedToken = jwt.verify(token, process.env.JWT_SIGNING_KEY);
@@ -23,7 +23,7 @@ module.exports.authorizer = async (event, context, callback) => {
  * @param {object} event
  * @param {object} decodedToken
  */
-function generatePolicy(effect, event, decodedToken) {
+function generatePolicy(effect: String, event: any, decodedToken: any) {
   return {
     "principalId": "user", 
     "policyDocument": {

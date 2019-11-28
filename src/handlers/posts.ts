@@ -10,15 +10,27 @@ const connection = mysql.createConnection({
 /**
  * Retrive posts.
  */
-module.exports.getPosts = async (event) => {
-  connection.changeUser({ database: process.env.DB_DATABASE }, error => {
+module.exports.getPosts = async (event: object) => {
+  let defaults = {
+    requestContext: {
+      authorizer: {
+        company: null,
+        user: null,
+        issuer: null
+      }
+    }
+  };
+
+  let handleEvent = Object.assign(defaults, event);
+
+  connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
     if (error) {
       throw error;
     }
   });
   
-  let rows = await new Promise((resolve, reject) => {
-    connection.execute("SELECT * FROM posts", (error, rows, fields) => {
+  let rows = await new Promise((resolve: any, reject: any) => {
+    connection.execute("SELECT * FROM posts", (error: any, rows: any, fields: any) => {
       if (error) {
         throw error;
       }
@@ -27,11 +39,7 @@ module.exports.getPosts = async (event) => {
     });
   });
 
-  let authorizerContext = {};
-
-  if (event.requestContext && event.requestContext.authorizer) {
-    authorizerContext = event.requestContext.authorizer;
-  }
+  let authorizerContext = handleEvent.requestContext.authorizer;
 
   let data = {
     meta: {
@@ -51,7 +59,7 @@ module.exports.getPosts = async (event) => {
 /**
  * Retrive a single post.
  */
-module.exports.getPost = async (event) => {
+module.exports.getPost = async (event: object) => {
   return {
     statusCode: 200,
     body: JSON.stringify({}),
@@ -61,7 +69,7 @@ module.exports.getPost = async (event) => {
 /**
  * Create a single post.
  */
-module.exports.createPost = async (event) => {
+module.exports.createPost = async (event: object) => {
   return {
     statusCode: 201,
     body: JSON.stringify({}),
@@ -71,7 +79,7 @@ module.exports.createPost = async (event) => {
 /**
  * Update a single post.
  */
-module.exports.updatePost = async (event) => {
+module.exports.updatePost = async (event: object) => {
   return {
     statusCode: 200,
     body: JSON.stringify({}),
@@ -81,7 +89,7 @@ module.exports.updatePost = async (event) => {
 /**
  * Delete a single post.
  */
-module.exports.deletePost = async (event) => {
+module.exports.deletePost = async (event: object) => {
   return {
     statusCode: 204,
     body: JSON.stringify(null),

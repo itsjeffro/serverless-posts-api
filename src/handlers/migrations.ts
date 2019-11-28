@@ -1,4 +1,4 @@
-const knexfile = require('../knexfile');
+const knexfile = require('../../knexfile');
 const knex = require('knex/knex');
 
 const {
@@ -16,8 +16,10 @@ const {
 /**
  * Process migrations.
  */
-module.exports.process = async (event, context, callback) => {
-  let env = {};
+module.exports.process = async (event: any) => {
+  let env = {
+    configuration: null,
+  };
 
   env.configuration = knexfile;
 
@@ -27,7 +29,7 @@ module.exports.process = async (event, context, callback) => {
     knex(resolvedConfig)
       .migrate
       .latest()
-      .then(([batchNo, log]) => {
+      .then(([batchNo, log]: Array<any>) => {
         let message = '';
   
         if (log.length === 0) {
@@ -38,7 +40,7 @@ module.exports.process = async (event, context, callback) => {
   
         resolve(message);
       })
-      .catch((text) => {
+      .catch((text: any) => {
         reject(Error(text));
       });
   });
