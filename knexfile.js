@@ -1,5 +1,5 @@
 const database = require('./config/database');
-const Config = require('./src/Config');
+const Config = require('./src/lib/Config');
 
 let config = new Config(database);
 let driver = config.get('default');
