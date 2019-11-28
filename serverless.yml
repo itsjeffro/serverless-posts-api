@@ -12,10 +12,10 @@ provider:
 
 functions:
   authorizer:
-    handler: handlers/authorizer.authorizer
+    handler: dist/authorizer.authorizer
 
   getPosts:
-    handler: handlers/posts.getPosts
+    handler: dist/posts.getPosts
     events:
       - http:
           path: posts
@@ -25,7 +25,7 @@ functions:
           private: true
 
   getPost:
-    handler: handlers/posts.getPost
+    handler: dist/posts.getPost
     events:
       - http:
           path: posts/{uuid}
@@ -35,7 +35,7 @@ functions:
           private: true
 
   createPost:
-    handler: handlers/posts.createPost
+    handler: dist/posts.createPost
     events:
       - http:
           path: posts
@@ -45,7 +45,7 @@ functions:
           private: true
 
   updatePost:
-    handler: handlers/posts.updatePost
+    handler: dist/posts.updatePost
     events:
       - http:
           path: posts/{uuid}
@@ -55,7 +55,7 @@ functions:
           private: true
 
   deletePost:
-    handler: handlers/posts.deletePost
+    handler: dist/posts.deletePost
     events:
       - http:
           path: posts/{uuid}
@@ -65,7 +65,7 @@ functions:
           private: true
 
   migrationProcess:
-    handler: handlers/migrations.process
+    handler: dist/migrations.process
 
 resources: 
   Resources: 
