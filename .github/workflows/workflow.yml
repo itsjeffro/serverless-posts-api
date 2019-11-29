@@ -20,6 +20,8 @@ jobs:
           npm install
           npm test
           npm run build
+          rm -rf node_modules
+          npm i --production
       - name: Serverless deploy
         uses: serverless/github-action@master
         with:
