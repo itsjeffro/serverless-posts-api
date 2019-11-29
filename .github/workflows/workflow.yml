@@ -15,12 +15,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '10.16.3'
-      - name: Build
+      - name: Test and build
         run: |
           npm install
-          npm run prod
+          npm test
+          npm run build
       - name: Serverless deploy
-        uses: serverless/github-action@master 
+        uses: serverless/github-action@master
         with:
           args: deploy
         env:
