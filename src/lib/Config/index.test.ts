@@ -1,4 +1,4 @@
-const Config = require('./index');
+import Config from './index';
 
 describe('Test database configuration', () => {
   let items = {

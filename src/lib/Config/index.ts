@@ -1,4 +1,4 @@
-module.exports = class Config {
+export default class Config {
   public items: any;
 
   public constructor(items: any) {
