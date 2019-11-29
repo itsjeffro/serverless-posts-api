@@ -18,14 +18,14 @@ provider:
     JWT_SIGNING_KEY: ${env:JWT_SIGNING_KEY}
 
 package:
-  include:
-    - dist/**
-    - migrations/**
-    - config/**
   exclude:
     - '!node_modules/**'
     - node_modules/aws-sdk/**
     - /**
+  include:
+    - dist/**
+    - migrations/**
+    - config/**
 
 functions:
   authorizer:
