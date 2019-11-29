@@ -18,7 +18,6 @@ provider:
     JWT_SIGNING_KEY: ${env:JWT_SIGNING_KEY}
 
 package:
-  individually: false
   include:
     - dist/**
     - migrations/**
