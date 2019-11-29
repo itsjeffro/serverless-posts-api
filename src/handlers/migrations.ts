@@ -1,27 +1,29 @@
-const knexfile = require('../../knexfile');
+import Config from './../lib/Config';
+
 const knex = require('knex/knex');
+const database = require('../../config/database');
+const { resolveEnvironmentConfig } = require('knex/bin/utils/cli-config-utils');
 
-const {
-  mkConfigObj,
-  resolveKnexFilePath,
-  resolveEnvironmentConfig,
-  exit,
-  success,
-  checkLocalModule,
-  getMigrationExtension,
-  getSeedExtension,
-  getStubPath,
-} = require('knex/bin/utils/cli-config-utils');
-
-/**
- * Process migrations.
- */
 module.exports.process = async (event: any) => {
-  let env = {
-    configuration: null,
-  };
+  let config = new Config(database);
+  let driver = config.get('default');
+  let connection = config.get(`connections.${driver}`);
 
-  env.configuration = knexfile;
+  let env = {
+    configuration: {
+      client: connection.driver,
+      connection: {
+        host:     connection.host,
+        database: connection.database,
+        user:     connection.username,
+        password: connection.password,
+        port:     connection.port
+      },
+      migrations: {
+        tableName: 'migrations'
+      }
+    }
+  };
 
   const resolvedConfig = resolveEnvironmentConfig({}, env.configuration);
 
