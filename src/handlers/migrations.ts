@@ -32,15 +32,24 @@ module.exports.process = async (event: any) => {
       .migrate
       .latest()
       .then(([batchNo, log]: Array<any>) => {
-        let message = '';
+        let data = {
+          message: ''
+        };
   
         if (log.length === 0) {
-          message += 'Already up to date. ';
+          data = Object.assign({}, data, {
+            message: 'Already up to date.'
+          });
         }
   
-        message += `Batch ${batchNo} run: ${log.length} migrations` + log.join('\n');
+        if (log.length > 0) {
+          data = Object.assign({}, data, {
+            message: `Batch ${batchNo} run: ${log.length} migrations`,
+            migrations: log,
+          });
+        }
   
-        resolve(message);
+        resolve(data);
       })
       .catch((text: any) => {
         reject(Error(text));
