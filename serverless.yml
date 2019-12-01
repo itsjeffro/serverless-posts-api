@@ -29,7 +29,7 @@ package:
 
 functions:
   authorizer:
-    handler: dist/authorizer.authorizer
+    handler: dist/handlers/authorizer.authorizer
 
   getPosts:
     handler: dist/handlers/posts.getPosts
