@@ -1,4 +1,4 @@
-# Serverless Demo
+# Microservice - Demo Service
 
 ## Introduction
 
