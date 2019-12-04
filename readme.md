@@ -4,6 +4,11 @@
 
 This project was created as a learning exercise for an internal API microservice.
 
+### Shared resources
+
+A separate repository has been set up [here](https://github.com/itsjeffro/microservice-api-gateway) for a shared API gateway (AG). This way 
+teams can focus on having separate microservices per repository. All which will be able to reference the AG by its restApiId and rootResourceId.
+
 ## Testing
 
 ### Testing with Serverless
