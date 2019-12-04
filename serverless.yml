@@ -17,8 +17,6 @@ provider:
     DB_PORT: ${env:DB_PORT}
     DB_DATABASE: ${env:DB_DATABASE}
     JWT_SIGNING_KEY: ${env:JWT_SIGNING_KEY}
-  tags:
-    Environment: ${self:provider.stage}
 
 package:
   exclude:
