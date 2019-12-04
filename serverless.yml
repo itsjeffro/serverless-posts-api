@@ -31,9 +31,15 @@ package:
 functions:
   authorizer:
     handler: dist/handlers/authorizer.authorizer
+    tags:
+      Environment: ${self:provider.stage}
+      Name: authorizer-${self:provider.stage}-lambda
 
   getPosts:
     handler: dist/handlers/posts.getPosts
+    tags:
+      Environment: ${self:provider.stage}
+      Name: getPosts-${self:provider.stage}-lambda
     events:
       - http:
           path: posts
@@ -44,6 +50,9 @@ functions:
 
   getPost:
     handler: dist/handlers/posts.getPost
+    tags:
+      Environment: ${self:provider.stage}
+      Name: getPost-${self:provider.stage}-lambda
     events:
       - http:
           path: posts/{uuid}
@@ -54,6 +63,9 @@ functions:
 
   createPost:
     handler: dist/handlers/posts.createPost
+    tags:
+      Environment: ${self:provider.stage}
+      Name: createPost-${self:provider.stage}-lambda
     events:
       - http:
           path: posts
@@ -64,6 +76,9 @@ functions:
 
   updatePost:
     handler: dist/handlers/posts.updatePost
+    tags:
+      Environment: ${self:provider.stage}
+      Name: updatePost-${self:provider.stage}-lambda
     events:
       - http:
           path: posts/{uuid}
@@ -74,6 +89,9 @@ functions:
 
   deletePost:
     handler: dist/handlers/posts.deletePost
+    tags:
+      Environment: ${self:provider.stage}
+      Name: deletePost-${self:provider.stage}-lambda
     events:
       - http:
           path: posts/{uuid}
