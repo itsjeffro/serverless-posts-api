@@ -36,6 +36,9 @@ functions:
           path: posts
           method: get
           cors: true
+          authorizer:
+            type: CUSTOM
+            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
 
   getPost:
     handler: dist/handlers/posts.getPost
@@ -44,6 +47,9 @@ functions:
           path: posts/{uuid}
           method: get
           cors: true
+          authorizer:
+            type: CUSTOM
+            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
 
   createPost:
     handler: dist/handlers/posts.createPost
@@ -52,6 +58,9 @@ functions:
           path: posts
           method: post
           cors: true
+          authorizer:
+            type: CUSTOM
+            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
 
   updatePost:
     handler: dist/handlers/posts.updatePost
@@ -60,6 +69,9 @@ functions:
           path: posts/{uuid}
           method: put
           cors: true
+          authorizer:
+            type: CUSTOM
+            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
 
   deletePost:
     handler: dist/handlers/posts.deletePost
@@ -68,6 +80,9 @@ functions:
           path: posts/{uuid}
           method: delete
           cors: true
+          authorizer:
+            type: CUSTOM
+            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
 
   migrationProcess:
     handler: dist/handlers/migrations.process
