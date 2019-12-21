@@ -29,9 +29,6 @@ package:
     - config/**
 
 functions:
-  authorizer:
-    handler: dist/handlers/authorizer.authorizer
-
   getPosts:
     handler: dist/handlers/posts.getPosts
     events:
@@ -39,8 +36,6 @@ functions:
           path: posts
           method: get
           cors: true
-          authorizer: authorizer
-          private: true
 
   getPost:
     handler: dist/handlers/posts.getPost
@@ -49,8 +44,6 @@ functions:
           path: posts/{uuid}
           method: get
           cors: true
-          authorizer: authorizer
-          private: true
 
   createPost:
     handler: dist/handlers/posts.createPost
@@ -59,8 +52,6 @@ functions:
           path: posts
           method: post
           cors: true
-          authorizer: authorizer
-          private: true
 
   updatePost:
     handler: dist/handlers/posts.updatePost
@@ -69,8 +60,6 @@ functions:
           path: posts/{uuid}
           method: put
           cors: true
-          authorizer: authorizer
-          private: true
 
   deletePost:
     handler: dist/handlers/posts.deletePost
@@ -79,8 +68,6 @@ functions:
           path: posts/{uuid}
           method: delete
           cors: true
-          authorizer: authorizer
-          private: true
 
   migrationProcess:
     handler: dist/handlers/migrations.process
