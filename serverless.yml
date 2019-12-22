@@ -35,10 +35,6 @@ functions:
           path: posts
           method: get
           cors: true
-          request:
-            parameters:
-              paths:
-                uuid: true
           authorizer:
             type: CUSTOM
             authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
