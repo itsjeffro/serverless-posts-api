@@ -2,23 +2,32 @@ export default class LambdaEvent
 {
   public event = {
     body: '',
-    pathParameters: null,
-    requestContext: null,
+    pathParameters: {},
+    requestContext: {},
   };
 
-  public constructor(event: object) {
+  public objectRepository: any;
+
+  public constructor(objectRepository: any, event: object) {
     this.event = Object.assign(this.event, event);
+    this.objectRepository = objectRepository;
   }
 
   public getBody() {
     return JSON.parse(this.event.body);
   }
   
-  public getPathParameters() {
-    return this.event.pathParameters;
+  public getPathParameter(key?: string) {
+    return this.objectRepository.get(
+      this.event.pathParameters,
+      key
+    );
   }
 
-  public getRequestContext() {
-    return this.event.requestContext;
+  public getRequestContext(key?: string) {
+    return this.objectRepository.get(
+      this.event.requestContext,
+      key
+    );
   }
 }
