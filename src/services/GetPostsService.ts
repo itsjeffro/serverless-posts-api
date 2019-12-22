@@ -1,15 +1,25 @@
 export default class GetPostsService
 {
+  /**
+   * Database connection.
+   */
   public connection: any;
+
+  /**
+   * LambdaEvent.
+   */
   public lambdaEvent: any;
 
+  /**
+   * GetPostsService constructor.
+   */
   public constructor(connection: object, lambdaEvent: any) {
     this.connection = connection;
     this.lambdaEvent = lambdaEvent;
   }
 
   /**
-   * Returns all results.
+   * Get all records.
    */
   public async getAll() {
     this.connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
@@ -28,13 +38,18 @@ export default class GetPostsService
       });
     });
   
-    return {
+    const data = {
       meta: {
         company: this.lambdaEvent.getRequestContext('authorizer.company'),
         user: this.lambdaEvent.getRequestContext('authorizer.user'),
         application: this.lambdaEvent.getRequestContext('authorizer.issuer')
       },
       data: rows
+    };
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(data),
     };
   }
 }
