@@ -153,7 +153,9 @@ module.exports.createPost = async (event: object) => {
     new Date,
   ];
 
-  let result: string;
+  let result = {
+    insertId: 0
+  };
 
   result = await new Promise((resolve: any, reject: any) => {
     connection.execute("INSERT INTO posts (title, content, created_at) VALUES (?, ?, ?)", requestData, (error: any, results: any, fields: any) => {
@@ -161,7 +163,7 @@ module.exports.createPost = async (event: object) => {
         throw error;
       }
 
-      resolve(results.insertId);
+      resolve(results);
     });
   });
 
@@ -172,7 +174,7 @@ module.exports.createPost = async (event: object) => {
       application: authorizerContext.issuer || ""
     },
     data: {
-      insertId: result,
+      insertId: result.insertId,
     }
   };
 
@@ -196,8 +198,52 @@ module.exports.updatePost = async (event: object) => {
  * Delete a single post.
  */
 module.exports.deletePost = async (event: object) => {
+  connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
+    if (error) {
+      throw error;
+    }
+  });
+
+  const defaults = {
+    requestContext: {
+      authorizer: {
+        company: null,
+        user: null,
+        issuer: null
+      }
+    },
+    pathParameters: {
+      uuid: null
+    }
+  };
+
+  const handleEvent = Object.assign(defaults, event);
+  const postId = handleEvent.pathParameters.uuid;
+
+  let result = {
+    affectedRows: 0,
+    info: '',
+  };
+
+  result = await new Promise((resolve: any, reject: any) => {
+    connection.execute("DELETE FROM posts WHERE id = ? LIMIT 1", [postId], (error: any, results: any, fields: any) => {
+      if (error) {
+        throw error;
+      }
+
+      resolve(results);
+    });
+  });
+
+  if (result.affectedRows === 0) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({message: `No query results for IDs: ${postId}`}),
+    };
+  }
+
   return {
     statusCode: 204,
-    body: JSON.stringify(null),
+    body: JSON.stringify(result),
   };
 };
