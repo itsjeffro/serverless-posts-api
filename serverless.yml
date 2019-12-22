@@ -16,7 +16,6 @@ provider:
     DB_PASSWORD: ${env:DB_PASSWORD}
     DB_PORT: ${env:DB_PORT}
     DB_DATABASE: ${env:DB_DATABASE}
-    JWT_SIGNING_KEY: ${env:JWT_SIGNING_KEY}
 
 package:
   exclude:
@@ -36,6 +35,10 @@ functions:
           path: posts
           method: get
           cors: true
+          request:
+            parameters:
+              paths:
+                uuid: true
           authorizer:
             type: CUSTOM
             authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
