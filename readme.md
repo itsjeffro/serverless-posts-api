@@ -41,11 +41,11 @@ serverless invoke local --function getPosts -e DB_HOST=<host> -e DB_USER=root -e
 ```
 
 ```
-serverless invoke local --function getPost
+serverless invoke local --function getPost -e DB_HOST=<host> -e DB_USER=root -e DB_PASSWORD=<password> -e DB_PORT=3306 -e DB_DATABASE=<database> -p __tests__/data/serverless/getPost.json
 ```
 
 ```
-serverless invoke local --function createPost
+serverless invoke local --function createPost -e DB_HOST=<host> -e DB_USER=root -e DB_PASSWORD=<password> -e DB_PORT=3306 -e DB_DATABASE=<database> -p __tests__/data/serverless/createPost.json
 ```
 
 ```
