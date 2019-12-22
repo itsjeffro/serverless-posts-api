@@ -70,7 +70,9 @@ module.exports.getPost = async (event: object) => {
 
   const postId = 1;
 
-  const rows = await new Promise((resolve: any, reject: any) => {
+  let rows: object[];
+
+  rows = await new Promise((resolve: any, reject: any) => {
     connection.execute("SELECT * FROM posts WHERE id = ? LIMIT 1", [postId], (error: any, rows: any, fields: any) => {
       if (error) {
         throw error;
@@ -87,11 +89,13 @@ module.exports.getPost = async (event: object) => {
     };
   }
 
-  const row = rows[0];
+  const data = {
+    data: rows[0]
+  };
 
   return {
     statusCode: 200,
-    body: JSON.stringify(row),
+    body: JSON.stringify(data),
   };
 };
 
