@@ -1,22 +1,43 @@
+import ObjectRepository from "../ObjectRepository";
+
 export default class LambdaEvent
 {
+  /**
+   * Defaults from the passed event.
+   */
   public event = {
     body: '',
     pathParameters: {},
     requestContext: {},
   };
 
-  public objectRepository: any;
+  /**
+   * ObjectRepository.
+   */
+  public objectRepository: ObjectRepository;
 
-  public constructor(objectRepository: any, event: object) {
-    this.event = Object.assign(this.event, event);
+  /**
+   * LambdaEvent constructor.
+   */
+  public constructor(objectRepository: ObjectRepository, event: object) {
+    this.event = {
+      ...this.event,
+      ...event
+    };
+
     this.objectRepository = objectRepository;
   }
 
+  /**
+   * Returns parsed event.body.
+   */
   public getBody() {
     return JSON.parse(this.event.body);
   }
   
+  /**
+   * Returns value from event.pathParamters specified by the passed key. 
+   */
   public getPathParameter(key?: string) {
     return this.objectRepository.get(
       this.event.pathParameters,
@@ -24,6 +45,9 @@ export default class LambdaEvent
     );
   }
 
+  /**
+   * Returns value from event.requestContext specified by the passed key. 
+   */
   public getRequestContext(key?: string) {
     return this.objectRepository.get(
       this.event.requestContext,
