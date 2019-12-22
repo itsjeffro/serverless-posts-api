@@ -37,7 +37,7 @@ You may use the docker mysql image to test the functions below. To start, run `d
 Once the container is up, ensure that the ENV values for the commands are updated to reflect your host, user, pass, port and database.
 
 ```
-serverless invoke local --function getPosts -e DB_HOST=<host> -e DB_USER=root -e DB_PASSWORD=<password> -e DB_PORT=3306 -e DB_DATABASE=<database>
+serverless invoke local --function getPosts -e DB_HOST=<host> -e DB_USER=root -e DB_PASSWORD=<password> -e DB_PORT=3306 -e DB_DATABASE=<database> -p __tests__/data/serverless/getPosts.json
 ```
 
 ```

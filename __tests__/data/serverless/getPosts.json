@@ -1,0 +1,9 @@
+{
+  "requestContext": {
+    "authorizer": {
+      "user": "userName",
+      "company": "companyName",
+      "issuer": "issuerName"
+    }
+  }
+}
