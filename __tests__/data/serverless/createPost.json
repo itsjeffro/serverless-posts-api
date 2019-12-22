@@ -1,0 +1,10 @@
+{
+  "requestContext": {
+    "authorizer": {
+      "user": "userName",
+      "company": "companyName",
+      "issuer": "issuerName"
+    }
+  },
+  "body": "{\"title\": \"My record\", \"content\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dignissim augue urna, sit amet condimentum enim sagittis vel.\"}"
+}
