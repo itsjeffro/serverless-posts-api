@@ -31,8 +31,14 @@ export default class LambdaEvent
   /**
    * Returns parsed event.body.
    */
-  public getBody() {
-    return JSON.parse(this.event.body);
+  public getBody(key?: string) {
+    if (typeof this.event.body !== 'string') {
+      throw new Error('Event body must be a string type.');
+    }
+
+    const data = JSON.parse(this.event.body);
+
+    return this.objectRepository.get(data, key);
   }
   
   /**
