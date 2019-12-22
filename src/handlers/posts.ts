@@ -141,17 +141,15 @@ module.exports.createPost = async (event: object) => {
     pathParameters: {
       uuid: null
     },
-    body: {
-      title: null,
-      content: null,
-    },
+    body: '',
   };
 
   const handleEvent = Object.assign(defaults, event);
   const authorizerContext = handleEvent.requestContext.authorizer;
+  const body = JSON.parse(handleEvent.body);
   const requestData = [
-    handleEvent.body.title,
-    handleEvent.body.content,
+    body.title || null,
+    body.content || null,
     new Date,
   ];
 
