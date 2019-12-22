@@ -28,31 +28,13 @@ export default class GetPostsService
       });
     });
   
-    const requestContext = this.getRequestContext();
-    
     return {
       meta: {
-        company: requestContext.authorizer.company || "",
-        user: requestContext.authorizer.user || "",
-        application: requestContext.authorizer.issuer || ""
+        company: this.lambdaEvent.getRequestContext('authorizer.company'),
+        user: this.lambdaEvent.getRequestContext('authorizer.user'),
+        application: this.lambdaEvent.getRequestContext('authorizer.issuer')
       },
       data: rows
     };
-  }
-
-  /**
-   * Return request context.
-   */
-  public getRequestContext()
-  {
-    const requestContextDefaults =  {
-      authorizer: {
-        company: null,
-        user: null,
-        issuer: null,
-      }
-    };
-
-    return Object.assign(requestContextDefaults, this.lambdaEvent.getRequestContext());
   }
 }
