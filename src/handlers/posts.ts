@@ -18,10 +18,13 @@ module.exports.getPosts = async (event: object) => {
         user: null,
         issuer: null
       }
+    },
+    pathParameters: {
+      uuid: null
     }
   };
 
-  let handleEvent = Object.assign(defaults, event);
+  const handleEvent = Object.assign(defaults, event);
 
   connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
     if (error) {
@@ -29,7 +32,7 @@ module.exports.getPosts = async (event: object) => {
     }
   });
   
-  let rows = await new Promise((resolve: any, reject: any) => {
+  const rows = await new Promise((resolve: any, reject: any) => {
     connection.execute("SELECT * FROM posts", (error: any, rows: any, fields: any) => {
       if (error) {
         throw error;
@@ -98,7 +101,7 @@ module.exports.getPost = async (event: object) => {
   if (rows.length === 0) {
     return {
       statusCode: 404,
-      body: JSON.stringify({message: "Could not find record by ID"}),
+      body: JSON.stringify({message: `No query results for IDs: ${postId}`}),
     };
   }
 
