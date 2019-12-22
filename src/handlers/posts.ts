@@ -1,3 +1,6 @@
+import GetPostsService from "../services/GetPostsService";
+import LambdaEvent from "../lib/LambdaEvent";
+
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
@@ -11,48 +14,10 @@ const connection = mysql.createConnection({
  * Retrive posts.
  */
 module.exports.getPosts = async (event: object) => {
-  const defaults = {
-    requestContext: {
-      authorizer: {
-        company: null,
-        user: null,
-        issuer: null
-      }
-    },
-    pathParameters: {
-      uuid: null
-    }
-  };
-
-  const handleEvent = Object.assign(defaults, event);
-
-  connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
-    if (error) {
-      throw error;
-    }
-  });
+  const getPostsService = new GetPostsService(connection, new LambdaEvent(event));
   
-  const rows = await new Promise((resolve: any, reject: any) => {
-    connection.execute("SELECT * FROM posts", (error: any, rows: any, fields: any) => {
-      if (error) {
-        throw error;
-      }
+  const data = await getPostsService.getAll();
 
-      resolve(rows);
-    });
-  });
-
-  const authorizerContext = handleEvent.requestContext.authorizer;
-
-  const data = {
-    meta: {
-      company: authorizerContext.company || "",
-      user: authorizerContext.user || "",
-      application: authorizerContext.issuer || ""
-    },
-    data: rows
-  };
-  
   return {
     statusCode: 200,
     body: JSON.stringify(data),
