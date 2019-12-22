@@ -27,6 +27,11 @@ package:
     - migrations/**
     - config/**
 
+custom:
+  apiGateway:
+    authorizerId:
+      Fn:ImportValue: ApiGateway-${self:provider.stage}-authorizer
+
 functions:
   getPosts:
     handler: dist/handlers/posts.getPosts
