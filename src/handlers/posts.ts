@@ -124,9 +124,63 @@ module.exports.getPost = async (event: object) => {
  * Create a single post.
  */
 module.exports.createPost = async (event: object) => {
+  connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
+    if (error) {
+      throw error;
+    }
+  });
+
+  const defaults = {
+    requestContext: {
+      authorizer: {
+        company: null,
+        user: null,
+        issuer: null
+      }
+    },
+    pathParameters: {
+      uuid: null
+    },
+    body: {
+      title: null,
+      content: null,
+    },
+  };
+
+  const handleEvent = Object.assign(defaults, event);
+  const authorizerContext = handleEvent.requestContext.authorizer;
+  const requestData = [
+    handleEvent.body.title,
+    handleEvent.body.content,
+    new Date,
+  ];
+
+  let result: string;
+
+  result = await new Promise((resolve: any, reject: any) => {
+    connection.execute("INSERT INTO posts (title, content, created_at) VALUES (?, ?, ?)", requestData, (error: any, results: any, fields: any) => {
+      if (error) {
+        throw error;
+      }
+
+      resolve(results.insertId);
+    });
+  });
+
+  const data = {
+    meta: {
+      company: authorizerContext.company || "",
+      user: authorizerContext.user || "",
+      application: authorizerContext.issuer || ""
+    },
+    data: {
+      insertId: result,
+    }
+  };
+
   return {
     statusCode: 201,
-    body: JSON.stringify({}),
+    body: JSON.stringify(data),
   };
 };
 
