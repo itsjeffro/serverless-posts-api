@@ -60,9 +60,38 @@ module.exports.getPosts = async (event: object) => {
  * Retrive a single post.
  */
 module.exports.getPost = async (event: object) => {
+  connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
+    if (error) {
+      throw error;
+    }
+  });
+
+  console.log(event);
+
+  const postId = 1;
+
+  const rows = await new Promise((resolve: any, reject: any) => {
+    connection.execute("SELECT * FROM posts WHERE id = ? LIMIT 1", [postId], (error: any, rows: any, fields: any) => {
+      if (error) {
+        throw error;
+      }
+
+      resolve(rows);
+    });
+  });
+
+  if (rows.length === 0) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({message: "Could not find record by ID"}),
+    };
+  }
+
+  const row = rows[0];
+
   return {
     statusCode: 200,
-    body: JSON.stringify({}),
+    body: JSON.stringify(row),
   };
 };
 
