@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
  * Retrive posts.
  */
 module.exports.getPosts = async (event: object) => {
-  let defaults = {
+  const defaults = {
     requestContext: {
       authorizer: {
         company: null,
@@ -39,9 +39,9 @@ module.exports.getPosts = async (event: object) => {
     });
   });
 
-  let authorizerContext = handleEvent.requestContext.authorizer;
+  const authorizerContext = handleEvent.requestContext.authorizer;
 
-  let data = {
+  const data = {
     meta: {
       company: authorizerContext.company || "",
       user: authorizerContext.user || "",
@@ -66,9 +66,22 @@ module.exports.getPost = async (event: object) => {
     }
   });
 
-  console.log(event);
+  const defaults = {
+    requestContext: {
+      authorizer: {
+        company: null,
+        user: null,
+        issuer: null
+      }
+    },
+    pathParameters: {
+      uuid: null
+    }
+  };
 
-  const postId = 1;
+  const handleEvent = Object.assign(defaults, event);
+  const authorizerContext = handleEvent.requestContext.authorizer;
+  const postId = handleEvent.pathParameters.uuid;
 
   let rows: object[];
 
@@ -90,6 +103,11 @@ module.exports.getPost = async (event: object) => {
   }
 
   const data = {
+    meta: {
+      company: authorizerContext.company || "",
+      user: authorizerContext.user || "",
+      application: authorizerContext.issuer || ""
+    },
     data: rows[0]
   };
 
