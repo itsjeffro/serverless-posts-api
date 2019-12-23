@@ -24,8 +24,10 @@ jobs:
           npm i --production
       - name: Serverless deploy
         run: |
+          mkdir ~/.aws
+          echo ${{ secrets.AWS_CREDENTIALS }} > ~/.aws/credentials
           npm i serverless -g
-          serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           serverless deploy
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
