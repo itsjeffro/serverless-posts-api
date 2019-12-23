@@ -25,7 +25,7 @@ jobs:
       - name: Serverless deploy
         run: |
           echo ${{ secrets.AWS_ACCESS_KEY_ID }} 
-          npm i serverless -g
+          npm i serverless@1.59.3 -g
           serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           serverless deploy
         env:
