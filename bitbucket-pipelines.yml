@@ -15,6 +15,7 @@ pipelines:
             - dist/**
             - migrations/**
             - config/**
+            - node_modules/**
       - step:
           name: Deploy
           script:
