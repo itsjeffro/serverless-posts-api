@@ -2,7 +2,7 @@ image: node:10.16.3
   
 pipelines:
   branches: 
-    staging:
+    master:
       - step: 
           name: Test and build
           script: 
@@ -14,5 +14,5 @@ pipelines:
           name: Deploy
           script:
             - npm i serverless -g
-            - serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
             - serverless deploy
