@@ -8,3 +8,6 @@ jspm_packages
 
 # Serverless directories
 .serverless
+
+# Configuration
+config.yml
