@@ -20,7 +20,8 @@ pipelines:
           name: Deploy
           script:
             - cp config.yml.dist config.yml
-            - echo "${ssm:/aws/reference/secretsmanager/prod/microservice/config~true}" > config.yml
+            - ls -la
+            - echo "${ssm:/aws/reference/secretsmanager/prod/microservice/config~true}" > ./config.yml
             - npm i serverless -g
             - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
             - serverless deploy
