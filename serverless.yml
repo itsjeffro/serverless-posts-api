@@ -32,7 +32,7 @@ package:
 
 custom:
   app:
-    config: ${file(./config.yml):config}
+    config: ${file(./config.yml)}
   apiGateway:
     authorizerId:
       Fn:ImportValue: ApiGateway-${self:provider.stage}-authorizer

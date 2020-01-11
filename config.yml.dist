@@ -1,15 +1,14 @@
-config:
-  securityGroupIds:
+securityGroupIds:
   - sg-1
 
-  subnetIds:
-    - subnet-1
-    - subnet-2
-    - subnet-3
+subnetIds:
+  - subnet-1
+  - subnet-2
+  - subnet-3
 
-  database:
-    host: localhost
-    user: root
-    password: secret
-    port: 3306
-    database: demo
+database:
+  host: localhost
+  user: root
+  password: secret
+  port: 3306
+  database: demo
