@@ -11,11 +11,14 @@ provider:
     restApiRootResourceId: 
       'Fn::ImportValue': ApiGateway-${self:provider.stage}-rootResourceId
   environment:
-    DB_HOST: ${env:DB_HOST}
-    DB_USER: ${env:DB_USER}
-    DB_PASSWORD: ${env:DB_PASSWORD}
-    DB_PORT: ${env:DB_PORT}
-    DB_DATABASE: ${env:DB_DATABASE}
+    DB_HOST: ${self:custom.app.config.database.host}
+    DB_USER: ${self:custom.app.config.database.user}
+    DB_PASSWORD: ${self:custom.app.config.database.password}
+    DB_PORT: ${self:custom.app.config.database.port}
+    DB_DATABASE: ${self:custom.app.config.database.database}
+  vpc:
+    securityGroupIds: ${self:custom.app.config.securityGroupIds}
+    subnetIds: ${self:custom.app.config.subnetIds}
 
 package:
   exclude:
@@ -28,6 +31,8 @@ package:
     - config/**
 
 custom:
+  app:
+    config: ${file(./config.yml)}
   apiGateway:
     authorizerId:
       Fn:ImportValue: ApiGateway-${self:provider.stage}-authorizer
@@ -91,10 +96,10 @@ functions:
   migrationProcess:
     handler: dist/handlers/migrations.process
 
-resources: 
-  Resources: 
-    PostsTopic: 
-      Type: AWS::SNS::Topic 
-      Properties: 
-        DisplayName: 'Posts Topic' 
-        TopicName: PostsTopic
+resources:
+  Resources:
+    PostsTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: 'Posts Topic'
+        TopicName: PostsTopic-${self:provider.stage}

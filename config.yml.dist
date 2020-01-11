@@ -1,14 +1,15 @@
-securityGroupIds:
+config:
+  securityGroupIds:
   - sg-1
 
-subnetIds:
-  - subnet-1
-  - subnet-2
-  - subnet-3
+  subnetIds:
+    - subnet-1
+    - subnet-2
+    - subnet-3
 
-database:
-  host: ${env:DB_HOST}
-  user: ${env:DB_USER}
-  password: ${env:DB_PASSWORD}
-  port: ${env:DB_PORT}
-  database: ${env:DB_DATABASE}
+  database:
+    host: localhost
+    user: root
+    password: secret
+    port: 3306
+    database: demo
