@@ -46,14 +46,14 @@ export default class FileLogger implements LoggerInterface {
 
     if (! fs.existsSync(logDirectory)) {
         fs.mkdirSync(logDirectory, { recursive: true }, (error: any) => {
-          throw error;
+          if (error) throw error;
         });
     }
 
     let logMessage = `[${this.getFullDateTime()}] local.${level.toUpperCase()}: ${message} ${JSON.stringify(context)}` + '\r\n';
 
-    fs.appendFile(`${logDirectory}/serverless.log`, logMessage, function (err: any) {
-      if (err) throw err;
+    fs.appendFile(`${logDirectory}/serverless.log`, logMessage, function (error: any) {
+      if (error) throw error;
     });
   }
 
@@ -79,8 +79,10 @@ export default class FileLogger implements LoggerInterface {
     let day = ('0' + (date.getDate() + 1)).slice(-2);
     let fullDate = date.getFullYear() + '-' + month + '-' + day;
 
-    let seconds = ('0' + (date.getSeconds() + 1)).slice(-2);
-    let fullTime = date.getHours() + ':' + date.getMinutes() + ':' + seconds;
+    let hours = ('0' + date.getHours()).slice(-2);
+    let minutes = ('0' + date.getMinutes()).slice(-2);
+    let seconds = ('0' + date.getSeconds()).slice(-2);
+    let fullTime = hours + ':' + minutes + ':' + seconds;
 
     return fullDate + ' ' + fullTime;
   }
