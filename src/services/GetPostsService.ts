@@ -1,3 +1,5 @@
+import { LoggerInterface } from "src/lib/Log/LoggerInterface";
+
 export default class GetPostsService
 {
   /**
@@ -11,17 +13,27 @@ export default class GetPostsService
   public lambdaEvent: any;
 
   /**
+   * LambdaEvent.
+   */
+  public log: any;
+
+  /**
    * GetPostsService constructor.
    */
-  public constructor(connection: object, lambdaEvent: any) {
+  public constructor(connection: object, lambdaEvent: any, log: LoggerInterface) {
     this.connection = connection;
     this.lambdaEvent = lambdaEvent;
+    this.log = log;
   }
 
   /**
    * Get all records.
    */
   public async getAll() {
+    this.log.debug('Retrieving all posts.', {
+      action: 'GET',
+    });
+
     this.connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
       if (error) {
         throw error;

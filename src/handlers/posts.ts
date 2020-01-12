@@ -1,6 +1,8 @@
-import GetPostsService from "../services/GetPostsService";
 import LambdaEvent from "../lib/LambdaEvent";
 import ObjectRepository from "../lib/ObjectRepository";
+import Log from "../lib/Log";
+
+import GetPostsService from "../services/GetPostsService";
 import CreatePostService from "../services/CreatePostService";
 import GetPostService from "../services/GetPostService";
 
@@ -18,7 +20,7 @@ const connection = mysql.createConnection({
  */
 module.exports.getPosts = async (event: object) => {
   const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
-  const getPostsService = new GetPostsService(connection, lambdaEvent);
+  const getPostsService = new GetPostsService(connection, lambdaEvent, new Log);
 
   return await getPostsService.getAll();
 };
