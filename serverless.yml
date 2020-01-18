@@ -10,6 +10,9 @@ provider:
       'Fn::ImportValue': ApiGateway-${self:provider.stage}-restApiId
     restApiRootResourceId: 
       'Fn::ImportValue': ApiGateway-${self:provider.stage}-rootResourceId
+    restApiResources:
+      v1: 
+        Fn::ImportValue: ApiGateway-${self:provider.stage}-versionOneResourceId
   environment:
     DB_HOST: ${self:custom.app.config.database.host}
     DB_USER: ${self:custom.app.config.database.user}
@@ -33,6 +36,7 @@ package:
 custom:
   app:
     config: ${file(./config.yml)}
+    version: v1
   apiGateway:
     authorizerId:
       Fn:ImportValue: ApiGateway-${self:provider.stage}-authorizer
@@ -42,7 +46,7 @@ functions:
     handler: dist/handlers/posts.getPosts
     events:
       - http:
-          path: posts
+          path: ${self:custom.app.version}/posts
           method: get
           cors: true
           authorizer:
@@ -53,7 +57,7 @@ functions:
     handler: dist/handlers/posts.getPost
     events:
       - http:
-          path: posts/{uuid}
+          path: ${self:custom.app.version}/posts/{uuid}
           method: get
           cors: true
           authorizer:
@@ -64,7 +68,7 @@ functions:
     handler: dist/handlers/posts.createPost
     events:
       - http:
-          path: posts
+          path: ${self:custom.app.version}/posts
           method: post
           cors: true
           authorizer:
@@ -75,7 +79,7 @@ functions:
     handler: dist/handlers/posts.updatePost
     events:
       - http:
-          path: posts/{uuid}
+          path: ${self:custom.app.version}/posts/{uuid}
           method: put
           cors: true
           authorizer:
@@ -86,7 +90,7 @@ functions:
     handler: dist/handlers/posts.deletePost
     events:
       - http:
-          path: posts/{uuid}
+          path: ${self:custom.app.version}/posts/{uuid}
           method: delete
           cors: true
           authorizer:
