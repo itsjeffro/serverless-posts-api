@@ -66,8 +66,8 @@ module.exports.updatePost = async (event: object) => {
     };
   } catch (e) {
     if (e instanceof BadRequestException) {
-        statusCode = 400;
-        message = { message: e.message };
+      statusCode = 400;
+      message = { message: e.message };
     } else if (e instanceof RecordNotFoundException) {
       statusCode = 404;
       message = { message: e.message };
