@@ -1,8 +1,7 @@
 service: itsjeffro
 
 plugins:
-  - serverless-offline
-  - serverless-dotenv-plugin
+  ${file(plugins.yml):plugins}
 
 provider:
   name: aws
