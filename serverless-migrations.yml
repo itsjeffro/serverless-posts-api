@@ -18,12 +18,7 @@ package:
     - migrations/**
     - config/**
 
-custom:
-  app:
-    version: v1
-
 functions:
-
   migrationProcess:
     handler: dist/handlers/migrations.process
     reservedConcurrency: 1
@@ -36,7 +31,6 @@ functions:
               - Arn
 
 resources:
-
   Resources:
 
     # SQS: Failed migrations
