@@ -99,6 +99,14 @@ functions:
 
   migrationProcess:
     handler: dist/handlers/migrations.process
+    reservedConcurrency: 1
+    events:
+      - sqs:
+          batchSize: 1
+          arn:
+            Fn::GetAtt: 
+              - PostsMigrationsQueue
+              - Arn
 
 resources:
   Resources:
@@ -107,3 +115,20 @@ resources:
       Properties:
         DisplayName: 'Posts Topic'
         TopicName: PostsTopic-${self:provider.stage}
+        
+    PostsMigrationsDeadLetterQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: posts-${self:provider.stage}-migrations-dlq
+        MessageRetentionPeriod: 1209600
+    
+    PostsMigrationsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: posts-${self:provider.stage}-migrations
+        RedrivePolicy:
+          maxReceiveCount: 1
+          deadLetterTargetArn: 
+            Fn::GetAtt: 
+              - PostsMigrationsDeadLetterQueue 
+              - Arn 
