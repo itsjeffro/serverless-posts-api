@@ -1,8 +1,5 @@
 service: itsjeffro
 
-plugins:
-  ${file(plugins.yml):plugins}
-
 provider:
   name: aws
   runtime: nodejs10.x
@@ -22,9 +19,7 @@ provider:
     DB_PASSWORD: ${self:custom.app.config.database.password}
     DB_PORT: ${self:custom.app.config.database.port}
     DB_DATABASE: ${self:custom.app.config.database.database}
-  vpc:
-    securityGroupIds: ${self:custom.app.config.securityGroupIds}
-    subnetIds: ${self:custom.app.config.subnetIds}
+  vpc: ${self:custom:${self:provider.stage}.vpc}
 
 package:
   exclude:
@@ -43,6 +38,10 @@ custom:
   apiGateway:
     authorizerId:
       Fn:ImportValue: ApiGateway-${self:provider.stage}-authorizer
+  dev:
+    vpc:
+      subnetIds: ${ssm:/InternalApi/Vpc/Subnets~split}
+      securityGroupIds: ${ssm:/InternalApi/Vpc/SecurityGroups~split}
 
 functions:
   getPosts:
