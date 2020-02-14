@@ -5,8 +5,8 @@ provider:
   runtime: nodejs10.x
   region: ap-southeast-2
   stage: ${opt:stage, 'dev'}
-  environment: ${file(./serverless/config/env.yml):${self:provider.stage}.env}
-  vpc: ${file(./serverless/config/vpc.yml):${self:provider.stage}.vpc}
+  environment: ${file(./serverless/config/env.yml):env.${self:provider.stage}}
+  vpc: ${file(./serverless/config/vpc.yml):vpc.${self:provider.stage}}
 
 package:
   exclude:

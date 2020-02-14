@@ -13,8 +13,8 @@ provider:
     restApiResources:
       v1: 
         Fn::ImportValue: ApiGateway-${self:provider.stage}-versionOneResourceId
-  environment: ${file(./serverless/config/env.yml):${self:provider.stage}.env}
-  vpc: ${file(./serverless/config/vpc.yml):${self:provider.stage}.vpc}
+  environment: ${file(./serverless/config/env.yml):env.${self:provider.stage}}
+  vpc: ${file(./serverless/config/vpc.yml):vpc.${self:provider.stage}}
 
 package:
   exclude:
