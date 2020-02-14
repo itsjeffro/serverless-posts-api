@@ -1,0 +1,12 @@
+vpc:
+  dev:
+    subnetIds:
+      ${ssm:/InternalApi/Vpc/Subnets~split}
+    securityGroupIds:
+      ${ssm:/InternalApi/Vpc/SecurityGroups~split}
+
+  prod:
+    subnetIds:
+      ${ssm:/InternalApi/Vpc/Subnets~split}
+    securityGroupIds:
+      ${ssm:/InternalApi/Vpc/SecurityGroups~split}
