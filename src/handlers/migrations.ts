@@ -25,6 +25,10 @@ module.exports.process = async (event: any) => {
     }
   };
 
+  console.log({
+    message: `Preparing to connect to database [${connection.database}] on host [${connection.username}@${connection.host}:${connection.port}]`
+  });
+
   const resolvedConfig = resolveEnvironmentConfig({}, env.configuration);
 
   return new Promise((resolve, reject) => {
@@ -48,10 +52,14 @@ module.exports.process = async (event: any) => {
             migrations: log,
           });
         }
+
+        console.log(data);
   
         resolve(data);
       })
       .catch((text: any) => {
+        console.error({ message: `${text}` });
+
         reject(Error(text));
       });
   });
