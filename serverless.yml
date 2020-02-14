@@ -1,5 +1,8 @@
 service: itsjeffro
 
+plugins:
+  ${file(plugins.yml):plugins}
+
 provider:
   name: aws
   runtime: nodejs10.x

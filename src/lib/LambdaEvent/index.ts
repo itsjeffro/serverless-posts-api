@@ -1,6 +1,8 @@
 import ObjectRepository from "../ObjectRepository";
+import LambdaEventInterface from "./LambdaEventInterface";
+import BadRequestException from "../Http/BadRequestException";
 
-export default class LambdaEvent
+export default class LambdaEvent implements LambdaEventInterface
 {
   /**
    * Defaults from the passed event.
@@ -32,13 +34,13 @@ export default class LambdaEvent
    * Returns parsed event.body.
    */
   public getBody(key?: string) {
-    if (typeof this.event.body !== 'string') {
-      throw new Error('Event body must be a string type.');
+    try {
+      const data = JSON.parse(this.event.body);
+
+      return this.objectRepository.get(data, key);
+    } catch (e) {
+      throw new BadRequestException("Problems parsing JSON or is not an object");
     }
-
-    const data = JSON.parse(this.event.body);
-
-    return this.objectRepository.get(data, key);
   }
   
   /**

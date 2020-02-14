@@ -5,6 +5,10 @@ import Log from "../lib/Log";
 import GetPostsService from "../services/GetPostsService";
 import CreatePostService from "../services/CreatePostService";
 import GetPostService from "../services/GetPostService";
+import UpdatePostService from "../services/UpdatePostService";
+import RecordNotFoundException from "../lib/Database/RecordNotFoundException";
+import DeletePostService from "../services/DeletePostService";
+import BadRequestException from "../lib/Http/BadRequestException";
 
 const mysql = require('mysql2');
 
@@ -20,9 +24,9 @@ const connection = mysql.createConnection({
  */
 module.exports.getPosts = async (event: object) => {
   const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
-  const getPostsService = new GetPostsService(connection, lambdaEvent, new Log);
+  const service = new GetPostsService(connection, lambdaEvent, new Log);
 
-  return await getPostsService.getAll();
+  return await service.getAll();
 };
 
 /**
@@ -30,9 +34,9 @@ module.exports.getPosts = async (event: object) => {
  */
 module.exports.getPost = async (event: object) => {
   const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
-  const getPostService = new GetPostService(connection, lambdaEvent);
+  const service = new GetPostService(connection, lambdaEvent);
 
-  return await getPostService.getOne();
+  return await service.getOne();
 };
 
 /**
@@ -40,63 +44,42 @@ module.exports.getPost = async (event: object) => {
  */
 module.exports.createPost = async (event: object) => {
   const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
-  const createPostService = new CreatePostService(connection, lambdaEvent);
+  const service = new CreatePostService(connection, lambdaEvent);
 
-  return await createPostService.createOne();
+  return await service.createOne();
 };
 
 /**
  * Update one record.
  */
 module.exports.updatePost = async (event: object) => {
-  connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
-    if (error) {
-      throw error;
-    }
-  });
+  let statusCode = null;
+  let message = null;
 
-  const defaults = {
-    pathParameters: {
-      uuid: null
-    },
-    body: '',
-  };
+  try {
+    const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
+    const service = new UpdatePostService(connection, lambdaEvent);
 
-  const handleEvent = Object.assign(defaults, event);
-  const postId = handleEvent.pathParameters.uuid;
-  const body = JSON.parse(handleEvent.body);
-
-  let requestData = [
-    body.title || null,
-    body.content || null,
-    new Date,
-    postId,
-  ];
-
-  let result = {
-    affectedRows: 0
-  };
-
-  result = await new Promise((resolve: any, reject: any) => {
-    connection.execute("UPDATE posts SET title = ?, content = ?, updated_at = ? WHERE id = ? LIMIT 1", requestData, (error: any, results: any, fields: any) => {
-      if (error) {
-        throw error;
-      }
-
-      resolve(results);
-    });
-  });
-
-  if (result.affectedRows === 0) {
-    return {
-      statusCode: 404,
-      body: JSON.stringify({message: `No query results for IDs: ${postId}`}),
+    statusCode = 200;
+    message = {
+      data: await service.handle()
     };
+  } catch (e) {
+    if (e instanceof BadRequestException) {
+      statusCode = 400;
+      message = { message: e.message };
+    } else if (e instanceof RecordNotFoundException) {
+      statusCode = 404;
+      message = { message: e.message };
+    } else {
+      statusCode = 500;
+      message = { message: e.message };
+    }
   }
 
   return {
-    statusCode: 204,
-    body: JSON.stringify(null),
+    statusCode: statusCode,
+    body: JSON.stringify(message),
   };
 };
 
@@ -104,45 +87,29 @@ module.exports.updatePost = async (event: object) => {
  * Delete one record.
  */
 module.exports.deletePost = async (event: object) => {
-  connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
-    if (error) {
-      throw error;
-    }
-  });
+  let statusCode = null;
+  let message = null;
 
-  const defaults = {
-    pathParameters: {
-      uuid: null
-    }
-  };
+  try {
+    const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
+    const service = new DeletePostService(connection, lambdaEvent);
 
-  const handleEvent = Object.assign(defaults, event);
-  const postId = handleEvent.pathParameters.uuid;
-
-  let result = {
-    affectedRows: 0,
-    info: '',
-  };
-
-  result = await new Promise((resolve: any, reject: any) => {
-    connection.execute("DELETE FROM posts WHERE id = ? LIMIT 1", [postId], (error: any, results: any, fields: any) => {
-      if (error) {
-        throw error;
-      }
-
-      resolve(results);
-    });
-  });
-
-  if (result.affectedRows === 0) {
-    return {
-      statusCode: 404,
-      body: JSON.stringify({message: `No query results for IDs: ${postId}`}),
+    statusCode = 204;
+    message = {
+      data: await service.handle()
     };
+  } catch (e) {
+    if (e instanceof RecordNotFoundException) {
+      statusCode = 404;
+      message = { message: e.message };
+    } else {
+      statusCode = 500;
+      message = { message: e.message };
+    }
   }
 
   return {
-    statusCode: 204,
-    body: JSON.stringify(result),
+    statusCode: statusCode,
+    body: JSON.stringify(message),
   };
 };
