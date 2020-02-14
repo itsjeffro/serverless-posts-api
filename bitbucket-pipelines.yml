@@ -20,11 +20,15 @@ pipelines:
       - step:
           name: Run staging migrations
           script: 
-            - echo "TBA"
+            - cp serverless-migrations.yml serverless.yml
+            - npm i serverless -g
+            - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
+            - serverless deploy --stage dev
 
       - step:
           name: Deploy to staging
           script:
+            - cp serverless-api.yml serverless.yml
             - npm i serverless -g
             - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
             - serverless deploy --stage dev
@@ -33,12 +37,16 @@ pipelines:
           name: Run production migrations
           trigger: manual
           script: 
-            - echo "TBA"
+            - cp serverless-migrations.yml serverless.yml
+            - npm i serverless -g
+            - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
+            - serverless deploy --stage prod
 
       - step:
           name: Deploy to production
           trigger: manual
           script:
+            - cp serverless-api.yml serverless.yml
             - npm i serverless -g
             - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
             - serverless deploy --stage prod
