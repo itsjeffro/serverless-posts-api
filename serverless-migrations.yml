@@ -1,0 +1,80 @@
+service: itsjeffro-migrations
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: ap-southeast-2
+  stage: ${opt:stage, 'dev'}
+  apiGateway: 
+    restApiId: 
+      'Fn::ImportValue': ApiGateway-${self:provider.stage}-restApiId
+    restApiRootResourceId: 
+      'Fn::ImportValue': ApiGateway-${self:provider.stage}-rootResourceId
+    restApiResources:
+      v1: 
+        Fn::ImportValue: ApiGateway-${self:provider.stage}-versionOneResourceId
+  environment:
+    DB_HOST: ${ssm:/InternalApi/Database/DB_HOST~true}
+    DB_USER: ${ssm:/InternalApi/Database/DB_USER~true}
+    DB_PASSWORD: ${ssm:/InternalApi/Database/DB_PASSWORD~true}
+    DB_PORT: 3306
+    DB_DATABASE: ${ssm:/InternalApi/Database/DB_DATABASE~true}
+  vpc:
+    subnetIds:
+      ${ssm:/InternalApi/Vpc/Subnets~split}
+    securityGroupIds:
+      ${ssm:/InternalApi/Vpc/SecurityGroups~split}
+
+package:
+  exclude:
+    - ./**
+    - '!node_modules/**'
+    - node_modules/aws-sdk/**
+  include:
+    - dist/**
+    - migrations/**
+    - config/**
+
+custom:
+  app:
+    version: v1
+
+functions:
+
+  migrationProcess:
+    handler: dist/handlers/migrations.process
+    reservedConcurrency: 1
+    events:
+      - sqs:
+          batchSize: 1
+          arn:
+            Fn::GetAtt: 
+              - PostsMigrationsQueue
+              - Arn
+
+resources:
+
+  Resources:
+
+    # SQS: Failed migrations
+    # ======================
+    # - Retain failed messages for 14 days (1209600)
+    PostsMigrationsDeadLetterQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: posts-${self:provider.stage}-migrations-dlq
+        MessageRetentionPeriod: 1209600
+    
+    # SQS: Migrations
+    # ===============
+    # - Sends messages to dead letter queue after being recevied once
+    PostsMigrationsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: posts-${self:provider.stage}-migrations
+        RedrivePolicy:
+          maxReceiveCount: 1
+          deadLetterTargetArn: 
+            Fn::GetAtt: 
+              - PostsMigrationsDeadLetterQueue 
+              - Arn 
