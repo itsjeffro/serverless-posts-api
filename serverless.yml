@@ -14,12 +14,16 @@ provider:
       v1: 
         Fn::ImportValue: ApiGateway-${self:provider.stage}-versionOneResourceId
   environment:
-    DB_HOST: ${self:custom.app.config.database.host}
-    DB_USER: ${self:custom.app.config.database.user}
-    DB_PASSWORD: ${self:custom.app.config.database.password}
-    DB_PORT: ${self:custom.app.config.database.port}
-    DB_DATABASE: ${self:custom.app.config.database.database}
-  vpc: ${self:custom:${self:provider.stage}.vpc}
+    DB_HOST: ${ssm:/InternalApi/Database/DB_HOST~true}
+    DB_USER: ${ssm:/InternalApi/Database/DB_USER~true}
+    DB_PASSWORD: ${ssm:/InternalApi/Database/DB_PASSWORD~true}
+    DB_PORT: 3306
+    DB_DATABASE: ${ssm:/InternalApi/Database/DB_DATABASE~true}
+  vpc:
+    subnetIds:
+      ${ssm:/InternalApi/Vpc/Subnets~split}
+    securityGroupIds:
+      ${ssm:/InternalApi/Vpc/SecurityGroups~split}
 
 package:
   exclude:
@@ -33,15 +37,10 @@ package:
 
 custom:
   app:
-    config: ${file(./config.yml)}
     version: v1
   apiGateway:
     authorizerId:
       Fn:ImportValue: ApiGateway-${self:provider.stage}-authorizer
-  dev:
-    vpc:
-      subnetIds: ${ssm:/InternalApi/Vpc/Subnets~split}
-      securityGroupIds: ${ssm:/InternalApi/Vpc/SecurityGroups~split}
 
 functions:
   getPosts:
