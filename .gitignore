@@ -1,6 +1,8 @@
 /dist
 /environment
 /.idea
+swagger.json
+.env
 
 # package directories
 node_modules
