@@ -4,7 +4,12 @@
 
 This project was created as a learning exercise for an internal API microservice.
 
-### Shared resources
+Documentation:
+
+- [1. Getting started](./docs/getting-started.md)
+- [2. Testing](./docs/testing.md)
+
+## Shared resources
 
 A separate repository has been set up [here](https://github.com/itsjeffro/microservice-api-gateway) to provide shared resources. This way 
 teams can focus on having separate microservices per repository. All which will be able to reference the AG by its restApiId and rootResourceId.
@@ -13,54 +18,6 @@ Shared resources:
 
 - API Gateway
 - Custom authorizer
-
-## Testing
-
-### Testing with Serverless
-
-#### Migrations
-
-```
-serverless invoke local --function migrationProcess -e DB_HOST=<host> -e DB_USER=root -e DB_PASSWORD=<password> -e DB_PORT=3306 -e DB_DATABASE=<database>
-```
-
-#### Authorizer
-
-```
-serverless invoke local --function authorizer --data '{"authorizationToken":"<jwt-token>"}' -e JWT_SIGNING_KEY=<jwt-signing-key>
-```
-
-#### Posts
-
-You may use the docker mysql image to test the functions below. To start, run `docker-compose up -d`.
-
-Once the container is up, ensure that the ENV values for the commands are updated to reflect your host, user, pass, port and database.
-
-```
-serverless invoke local --function getPosts -p __tests__/data/serverless/getPosts.json
-```
-
-```
-serverless invoke local --function getPost -p __tests__/data/serverless/getPost.json
-```
-
-```
-serverless invoke local --function createPost -p __tests__/data/serverless/createPost.json
-```
-
-```
-serverless invoke local --function updatePost
-```
-
-```
-serverless invoke local --function deletePost
-```
-
-### Testing with Jest
-
-```
-npm run test
-```
 
 ## The Whys
 
