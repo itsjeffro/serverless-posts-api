@@ -15,6 +15,7 @@
     ],
     "esModuleInterop": true,
     "inlineSourceMap": true,
+    "removeComments": true,
   },
   "exclude": [
     "**/*.test.ts"
