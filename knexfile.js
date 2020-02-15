@@ -1,22 +1,19 @@
-const database = require('./config/database');
-const Config = require('./src/lib/Config');
-
-let config = new Config(database);
-let driver = config.get('default');
-let connection = config.get(`connections.${driver}`);
+if (process.env.STAGE === 'local') {
+  require("dotenv").config();
+}
 
 module.exports = {
-  client: connection.driver,
+  client: "mysql2",
 
   connection: {
-    host:     connection.host,
-    database: connection.database,
-    user:     connection.username,
-    password: connection.password,
-    port:     connection.port
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
   },
 
   migrations: {
-    tableName: 'migrations'
+    tableName: 'posts_migrations'
   }
 };
