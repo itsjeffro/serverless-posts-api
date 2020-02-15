@@ -38,7 +38,7 @@ class DeletePostService {
     };
 
     result = await new Promise((resolve: any, reject: any) => {
-      this.db.execute("DELETE FROM posts WHERE id = ? LIMIT 1", [postId], (error: any, results: any, fields: any) => {
+      this.db.execute("DELETE FROM posts WHERE uuid = ? LIMIT 1", [postId], (error: any, results: any, fields: any) => {
         if (error) {
           throw error;
         }

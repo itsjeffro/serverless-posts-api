@@ -1,3 +1,5 @@
+const uuid = require("uuid/v4");
+
 export default class CreatePostService
 {
   /**
@@ -29,8 +31,11 @@ export default class CreatePostService
     });
   
     const requestData = [
+      uuid(),
       this.lambdaEvent.getBody('title'),
-      this.lambdaEvent.getBody('content'),
+      this.lambdaEvent.getBody('slug') || "",
+      this.lambdaEvent.getBody('content') || "",
+      new Date,
       new Date,
     ];
   
@@ -39,7 +44,7 @@ export default class CreatePostService
     };
   
     result = await new Promise((resolve: any, reject: any) => {
-      this.connection.execute("INSERT INTO posts (title, content, created_at) VALUES (?, ?, ?)", requestData, (error: any, results: any, fields: any) => {
+      this.connection.execute("INSERT INTO posts (uuid, title, slug, content, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", requestData, (error: any, results: any, fields: any) => {
         if (error) {
           throw error;
         }

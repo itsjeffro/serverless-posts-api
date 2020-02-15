@@ -34,6 +34,7 @@ class UpdatePostService {
   
     let requestData = [
       this.lambdaEvent.getBody('title') || "",
+      this.lambdaEvent.getBody('slug') || "",
       this.lambdaEvent.getBody('content') || "",
       new Date,
       postId,
@@ -44,7 +45,7 @@ class UpdatePostService {
     };
   
     result = await new Promise((resolve: any, reject: any) => {
-      this.db.execute("UPDATE posts SET title = ?, content = ?, updated_at = ? WHERE id = ? LIMIT 1", requestData, (error: any, results: any, fields: any) => {
+      this.db.execute("UPDATE posts SET title = ?, slug = ?, content = ?, updated_at = ? WHERE uuid = ? LIMIT 1", requestData, (error: any, results: any, fields: any) => {
         if (error) {
           throw error;
         }

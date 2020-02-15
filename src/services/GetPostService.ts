@@ -33,7 +33,7 @@ export default class GetPostService
     let rows: object[];
   
     rows = await new Promise((resolve: any, reject: any) => {
-      this.connection.execute("SELECT * FROM posts WHERE id = ? LIMIT 1", [postId], (error: any, rows: any, fields: any) => {
+      this.connection.execute("SELECT * FROM posts WHERE uuid = ? LIMIT 1", [postId], (error: any, rows: any, fields: any) => {
         if (error) {
           throw error;
         }
