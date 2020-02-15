@@ -1,4 +1,8 @@
 vpc:
+  local:
+    subnetIds:
+    securityGroupIds:
+
   dev:
     subnetIds:
       ${ssm:/InternalApi/Vpc/Subnets~split}
