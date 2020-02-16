@@ -3,13 +3,13 @@ import DatabaseInterface from "../lib/Database/DatabaseInteface";
 import RecordNotFoundException from "../lib/Database/RecordNotFoundException";
 
 class GetPostService {
-  public db: DatabaseInterface;
-  public lambdaEvent: LambdaEventInterface;
+  db: DatabaseInterface;
+  lambdaEvent: LambdaEventInterface;
 
   /**
    * GetPostService constructor.
    */
-  public constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
+  constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
     this.db = db;
     this.lambdaEvent = lambdaEvent;
   }
@@ -17,7 +17,7 @@ class GetPostService {
   /**
    * Get one record.
    */
-  public async handle() {
+  async handle() {
     const id = this.lambdaEvent.getPathParameter('uuid');
   
     const [ rows ] = await this.db.execute(

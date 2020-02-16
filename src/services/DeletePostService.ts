@@ -3,13 +3,13 @@ import LambdaEventInterface from "../lib/LambdaEvent/LambdaEventInterface";
 import DatabaseInterface from "src/lib/Database/DatabaseInteface";
 
 class DeletePostService {
-  public db: DatabaseInterface;
-  public lambdaEvent: LambdaEventInterface;
+  db: DatabaseInterface;
+  lambdaEvent: LambdaEventInterface;
 
   /**
    * GetPostsService constructor.
    */
-  public constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
+  constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
     this.db = db;
     this.lambdaEvent = lambdaEvent;
   }

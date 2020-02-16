@@ -4,13 +4,13 @@ import DatabaseInterface from "src/lib/Database/DatabaseInteface";
 const uuid = require("uuid/v4");
 
 class CreatePostService {
-  public db: DatabaseInterface;
-  public lambdaEvent: LambdaEventInterface;
+  db: DatabaseInterface;
+  lambdaEvent: LambdaEventInterface;
 
   /**
    * GetPostsService constructor.
    */
-  public constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
+  constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
     this.db = db;
     this.lambdaEvent = lambdaEvent;
   }
@@ -18,7 +18,7 @@ class CreatePostService {
   /**
    * Creates one recored.
    */
-  public async handle() {
+  async handle() {
     const request = [
       uuid(),
       this.lambdaEvent.getBody('title'),
