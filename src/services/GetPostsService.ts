@@ -1,27 +1,17 @@
 import { LoggerInterface } from "src/lib/Log/LoggerInterface";
+import LambdaEventInterface from "src/lib/LambdaEvent/LambdaEventInterface";
+import DatabaseInterface from "src/lib/Database/DatabaseInteface";
 
-export default class GetPostsService
-{
-  /**
-   * Database connection.
-   */
-  public connection: any;
-
-  /**
-   * LambdaEvent.
-   */
-  public lambdaEvent: any;
-
-  /**
-   * LambdaEvent.
-   */
-  public log: any;
+class GetPostsService {
+  db: DatabaseInterface;
+  lambdaEvent: LambdaEventInterface;
+  log: LoggerInterface;
 
   /**
    * GetPostsService constructor.
    */
-  public constructor(connection: object, lambdaEvent: any, log: LoggerInterface) {
-    this.connection = connection;
+  constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface, log: LoggerInterface) {
+    this.db = db;
     this.lambdaEvent = lambdaEvent;
     this.log = log;
   }
@@ -29,39 +19,33 @@ export default class GetPostsService
   /**
    * Get all records.
    */
-  public async getAll() {
-    this.log.debug('Retrieving all posts.', {
-      action: 'GET',
-    });
-
-    this.connection.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
-      if (error) {
-        throw error;
-      }
-    });
-    
-    const rows = await new Promise((resolve: any, reject: any) => {
-      this.connection.execute("SELECT * FROM posts ORDER BY id DESC", (error: any, rows: any, fields: any) => {
-        if (error) {
-          throw error;
-        }
-  
-        resolve(rows);
-      });
-    });
-  
-    const data = {
-      meta: {
-        company: this.lambdaEvent.getRequestContext('authorizer.company'),
-        user: this.lambdaEvent.getRequestContext('authorizer.user'),
-        application: this.lambdaEvent.getRequestContext('authorizer.issuer')
-      },
-      data: rows
-    };
+  async handle() {
+    const [ rows ] = await this.db.execute(
+      `SELECT * FROM posts WHERE deleted_at IS NULL ORDER BY id DESC`
+    );
 
     return {
-      statusCode: 200,
-      body: JSON.stringify(data),
+      data: rows
     };
   }
 }
+
+/**
+ * @swagger
+ *
+ * /posts:
+ *   get:
+ *     tags:
+ *     - "posts"
+ *     summary: "Gets all posts"
+ *     description: ""
+ *     responses:
+ *       200:
+ *         description: ""
+ *         content:
+ *           application/json:
+ *             example:
+ *               -
+ *                 $ref: '#/definitions/schema/post'
+ */
+export default GetPostsService;

@@ -10,7 +10,7 @@ import RecordNotFoundException from "../lib/Database/RecordNotFoundException";
 import DeletePostService from "../services/DeletePostService";
 import BadRequestException from "../lib/Http/BadRequestException";
 
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -51,156 +51,131 @@ const connection = mysql.createConnection({
  */
 
 /**
- * @swagger
- *
- * /posts:
- *   get:
- *     tags:
- *     - "posts"
- *     summary: "Gets all posts"
- *     description: ""
- *     responses:
- *       200:
- *         description: ""
- *         content:
- *           application/json:
- *             example:
- *               -
- *                 $ref: '#/definitions/schema/post'
+ * Gets all posts.
+ * 
+ * @param {object} event
+ * @returns {object}
  */
 module.exports.getPosts = async (event: object) => {
-  const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
-  const service = new GetPostsService(connection, lambdaEvent, new Log);
-
-  return await service.getAll();
-};
-
-/**
- * @swagger
- *
- * /posts/{uuid}:
- *   get:
- *     tags:
- *     - "posts"
- *     summary: "Gets one post"
- *     description: ""
- *     parameters:
- *       - in: path
- *         name: uuid
- *         description: The UUID of the post
- *         required: true
- *         schema:
- *           type: string
- *           example: a2a8f957-c4b5-4e40-9a30-ab10cd962cbb
- *     responses:
- *       200:
- *         description: ""
- *         content:
- *           application/json:
- *             example:
- *               $ref: '#/definitions/schema/post'
- */
-module.exports.getPost = async (event: object) => {
-  const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
-  const service = new GetPostService(connection, lambdaEvent);
-
-  return await service.getOne();
-};
-
-/**
- * @swagger
- *
- * /posts:
- *   post:
- *     tags:
- *     - "posts"
- *     summary: "Creates a posts"
- *     description: ""
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             properties:
- *               title:
- *                 type: string
- *                 example: My first post
- *               content:
- *                 type: string
- *                 example: My post's content
- *             required:
- *               - title
- *     responses:
- *       201:
- *         description: ""
- *         content:
- *           application/json:
- *             example: 
- *               $ref: '#/definitions/schema/post'
- *       400:
- *         $ref: '#/definitions/responses/400'
- */
-module.exports.createPost = async (event: object) => {
-  const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
-  const service = new CreatePostService(connection, lambdaEvent);
-
-  return await service.createOne();
-};
-
-/**
- * @swagger
- *
- * /posts/{uuid}:
- *   put:
- *     tags:
- *     - "posts"
- *     summary: "Updates a posts"
- *     description: ""
- *     parameters:
- *       - in: path
- *         name: uuid
- *         description: The UUID of the post
- *         required: true
- *         schema:
- *           type: string
- *           example: a2a8f957-c4b5-4e40-9a30-ab10cd962cbb
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             properties:
- *               title:
- *                 type: string
- *                 example: My first post
- *               content:
- *                 type: string
- *                 example: My post's content
- *             required:
- *               - title
- *     responses:
- *       200:
- *         description: ""
- *         content:
- *           application/json:
- *             example: 
- *               $ref: '#/definitions/schema/post'
- *       400:
- *         $ref: '#/definitions/responses/400'
- *       404:
- *         $ref: '#/definitions/responses/404'
- */
-module.exports.updatePost = async (event: object) => {
-  let statusCode = null;
-  let message = null;
+  let db = await connection;
 
   try {
-    const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
-    const service = new UpdatePostService(connection, lambdaEvent);
+    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
+      if (error) {
+        throw error;
+      }
+    });
 
-    statusCode = 200;
-    message = {
-      data: await service.handle()
+    const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
+    const service = new GetPostsService(await db, lambdaEvent, new Log);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(await service.handle())
+    }
+  } catch (error) {
+    console.log(error.message);
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: "Oops! Something went wrong" })
+    }
+  }
+};
+
+/**
+ * Gets a post.
+ * 
+ * @param {object} event
+ * @returns {object}
+ */
+module.exports.getPost = async (event: object) => {
+  let db = await connection;
+
+  try {
+    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
+      if (error) {
+        throw error;
+      }
+    });
+
+    const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
+    const service = new GetPostService(db, lambdaEvent);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(await service.handle())
+    }
+  } catch (error) {
+    console.log(error.message);
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: "Oops! Something went wrong" }),
     };
+  }
+};
+
+/**
+ * Creates a post.
+ * 
+ * @param {object} event
+ * @returns {object}
+ */
+module.exports.createPost = async (event: object) => {
+  let db = await connection;
+
+  try {
+    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
+      if (error) {
+        throw error;
+      }
+    });
+
+    const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
+    const service = new CreatePostService(await connection, lambdaEvent);
+
+    return {
+      statusCode: 201,
+      body: JSON.stringify(await service.handle()),
+    };
+  } catch (error) {
+    console.log(error.message);
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: "Oops! Something went wrong" }),
+    };
+  }
+};
+
+/**
+ * Updates a post.
+ * 
+ * @param {object} event
+ * @returns {object}
+ */
+module.exports.updatePost = async (event: object) => {
+  let db = await connection;
+
+  try {
+    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
+      if (error) {
+        throw error;
+      }
+    });
+
+    const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
+    const service = new UpdatePostService(db, lambdaEvent);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(await service.handle())
+    }
   } catch (e) {
+    let statusCode = null;
+    let message = null;
+
     if (e instanceof BadRequestException) {
       statusCode = 400;
       message = { message: e.message };
@@ -209,67 +184,58 @@ module.exports.updatePost = async (event: object) => {
       message = { message: e.message };
     } else {
       statusCode = 500;
-      message = { message: e.message };
+      message = { message: "Oops! Something went wrong" };
     }
-  }
 
-  return {
-    statusCode: statusCode,
-    body: JSON.stringify(message),
-  };
+    console.log(e.message);
+
+    return {
+      statusCode: statusCode,
+      body: JSON.stringify(message),
+    };
+  }
 };
 
 /**
- * @swagger
- *
- * /posts/{uuid}:
- *   delete:
- *     tags:
- *     - "posts"
- *     summary: "Deletes a posts"
- *     description: ""
- *     parameters:
- *       - in: path
- *         name: uuid
- *         description: The UUID of the post
- *         required: true
- *         schema:
- *           type: string
- *           example: a2a8f957-c4b5-4e40-9a30-ab10cd962cbb
- *     responses:
- *       204:
- *         description: ""
- *         content:
- *           application/json:
- *             example: 
- *               null
- *       404:
- *         $ref: '#/definitions/responses/404'
+ * Deletes a post.
+ * 
+ * @param {object} event
+ * @returns {object}
  */
 module.exports.deletePost = async (event: object) => {
-  let statusCode = null;
-  let message = null;
+  let db = await connection;
 
   try {
-    const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
-    const service = new DeletePostService(connection, lambdaEvent);
+    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
+      if (error) {
+        throw error;
+      }
+    });
 
-    statusCode = 204;
-    message = {
-      data: await service.handle()
-    };
+    const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
+    const service = new DeletePostService(db, lambdaEvent);
+
+    return {
+      statusCode: 204,
+      body: JSON.stringify(await service.handle())
+    }
   } catch (e) {
+    let statusCode = null;
+    let message = null;
+
     if (e instanceof RecordNotFoundException) {
       statusCode = 404;
       message = { message: e.message };
     } else {
       statusCode = 500;
-      message = { message: e.message };
+      message = { message: "Oops! Something went wrong" };
     }
-  }
 
-  return {
-    statusCode: statusCode,
-    body: JSON.stringify(message),
-  };
+    console.log(e.message);
+
+    return {
+      statusCode: statusCode,
+      body: JSON.stringify(message),
+    };
+  }
 };
