@@ -57,7 +57,7 @@ const connection = mysql.createConnection({
  * @returns {object}
  */
 module.exports.getPosts = async (event: object) => {
-  let db = await connection;
+  const db = await connection;
 
   try {
     db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
@@ -90,7 +90,7 @@ module.exports.getPosts = async (event: object) => {
  * @returns {object}
  */
 module.exports.getPost = async (event: object) => {
-  let db = await connection;
+  const db = await connection;
 
   try {
     db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
@@ -123,7 +123,7 @@ module.exports.getPost = async (event: object) => {
  * @returns {object}
  */
 module.exports.createPost = async (event: object) => {
-  let db = await connection;
+  const db = await connection;
 
   try {
     db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
@@ -156,7 +156,7 @@ module.exports.createPost = async (event: object) => {
  * @returns {object}
  */
 module.exports.updatePost = async (event: object) => {
-  let db = await connection;
+  const db = await connection;
 
   try {
     db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
@@ -203,7 +203,7 @@ module.exports.updatePost = async (event: object) => {
  * @returns {object}
  */
 module.exports.deletePost = async (event: object) => {
-  let db = await connection;
+  const db = await connection;
 
   try {
     db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
