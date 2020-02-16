@@ -58,13 +58,14 @@ const connection = mysql.createConnection({
  */
 module.exports.getPosts = async (event: object) => {
   const db = await connection;
+  const database = process.env.DB_DATABASE;
 
   try {
-    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
-      if (error) {
-        throw error;
-      }
-    });
+    console.log(`Changing database...`);
+
+    await db.changeUser({ database: database });
+
+    console.log(`Changed to databse [${database}]`);
 
     const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
     const service = new GetPostsService(await db, lambdaEvent, new Log);
@@ -91,13 +92,14 @@ module.exports.getPosts = async (event: object) => {
  */
 module.exports.getPost = async (event: object) => {
   const db = await connection;
+  const database = process.env.DB_DATABASE;
 
   try {
-    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
-      if (error) {
-        throw error;
-      }
-    });
+    console.log(`Changing database...`);
+
+    await db.changeUser({ database: database });
+
+    console.log(`Changed to databse [${database}]`);
 
     const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
     const service = new GetPostService(db, lambdaEvent);
@@ -124,13 +126,14 @@ module.exports.getPost = async (event: object) => {
  */
 module.exports.createPost = async (event: object) => {
   const db = await connection;
+  const database = process.env.DB_DATABASE;
 
   try {
-    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
-      if (error) {
-        throw error;
-      }
-    });
+    console.log(`Changing database...`);
+
+    await db.changeUser({ database: database });
+
+    console.log(`Changed to databse [${database}]`);
 
     const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
     const service = new CreatePostService(await connection, lambdaEvent);
@@ -157,13 +160,14 @@ module.exports.createPost = async (event: object) => {
  */
 module.exports.updatePost = async (event: object) => {
   const db = await connection;
+  const database = process.env.DB_DATABASE;
 
   try {
-    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
-      if (error) {
-        throw error;
-      }
-    });
+    console.log(`Changing database...`);
+
+    await db.changeUser({ database: database });
+
+    console.log(`Changed to databse [${database}]`);
 
     const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
     const service = new UpdatePostService(db, lambdaEvent);
@@ -204,13 +208,14 @@ module.exports.updatePost = async (event: object) => {
  */
 module.exports.deletePost = async (event: object) => {
   const db = await connection;
+  const database = process.env.DB_DATABASE;
 
   try {
-    db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
-      if (error) {
-        throw error;
-      }
-    });
+    console.log(`Changing database...`);
+
+    await db.changeUser({ database: database });
+
+    console.log(`Changed to databse [${database}]`);
 
     const lambdaEvent = new LambdaEvent(new ObjectRepository, event);
     const service = new DeletePostService(db, lambdaEvent);
