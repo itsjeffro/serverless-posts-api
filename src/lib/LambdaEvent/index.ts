@@ -33,7 +33,7 @@ export default class LambdaEvent implements LambdaEventInterface
   /**
    * Returns parsed event.body.
    */
-  public getBody(key?: string) {
+  public getBody(key?: string): object {
     try {
       const data = JSON.parse(this.event.body);
 
@@ -46,7 +46,7 @@ export default class LambdaEvent implements LambdaEventInterface
   /**
    * Returns value from event.pathParamters specified by the passed key. 
    */
-  public getPathParameter(key?: string) {
+  public getPathParameter(key?: string): any {
     return this.objectRepository.get(
       this.event.pathParameters,
       key
@@ -56,7 +56,7 @@ export default class LambdaEvent implements LambdaEventInterface
   /**
    * Returns value from event.requestContext specified by the passed key. 
    */
-  public getRequestContext(key?: string) {
+  public getRequestContext(key?: string): any {
     return this.objectRepository.get(
       this.event.requestContext,
       key
