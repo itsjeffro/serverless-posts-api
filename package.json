@@ -7,6 +7,7 @@
     "test": "jest",
     "build": "tsc",
     "watch": "tsc --watch",
+    "make:migration": "cross-env STAGE=local ./node_modules/.bin/knex migrate:make",
     "migrate": "cross-env STAGE=local ./node_modules/.bin/knex migrate:latest",
     "swagger": "./node_modules/.bin/swagger-jsdoc -d swaggerDef.js -o swagger.json"
   },
