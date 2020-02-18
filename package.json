@@ -8,6 +8,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "make:migration": "cross-env STAGE=local ./node_modules/.bin/knex migrate:make",
+    "make:migration-queues": "node ./dist/services/MigrationsQueue/command.js",
     "migrate": "cross-env STAGE=local ./node_modules/.bin/knex migrate:latest",
     "swagger": "./node_modules/.bin/swagger-jsdoc -d swaggerDef.js -o swagger.json"
   },
