@@ -8,7 +8,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "sls:start": "sls offline",
-    "express:start": "node index.js",
+    "express:start": "cross-env STAGE=local node index.js",
     "make:migration": "cross-env STAGE=local ./node_modules/.bin/knex migrate:make",
     "make:migration-queues": "node ./dist/services/MigrationsQueue/command.js",
     "migrate": "cross-env STAGE=local ./node_modules/.bin/knex migrate:latest",
@@ -31,7 +31,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "knex": "^0.20.2",
-    "mysql2": "^2.0.0",
+    "mysql2": "^2.2.5",
     "serverless-dotenv-plugin": "^2.3.2",
     "serverless-offline": "^5.12.1",
     "uuid": "^3.4.0"
