@@ -1,8 +1,8 @@
 service: itsjeffro
 
 plugins:
-  - serverless-offline
   - serverless-dotenv-plugin
+  - serverless-offline
 
 provider:
   name: aws
@@ -17,7 +17,12 @@ provider:
     restApiResources:
       v1: 
         Fn::ImportValue: ApiGateway-${self:provider.stage}-versionOneResourceId
-  environment: ${file(./serverless/config/env.yml):env.${self:provider.stage}}
+  environment:
+    DB_HOST: ${file(./serverless/config/env.yml):env.${self:provider.stage}.DB_HOST}
+    DB_USER: ${file(./serverless/config/env.yml):env.${self:provider.stage}.DB_USER}
+    DB_PASSWORD: ${file(./serverless/config/env.yml):env.${self:provider.stage}.DB_PASSWORD}
+    DB_PORT: ${file(./serverless/config/env.yml):env.${self:provider.stage}.DB_PORT}
+    DB_DATABASE: ${file(./serverless/config/env.yml):env.${self:provider.stage}.DB_DATABASE}
   vpc: ${file(./serverless/config/vpc.yml):vpc.${self:provider.stage}}
 
 package:
@@ -25,69 +30,27 @@ package:
     - ./**
     - '!node_modules/**'
     - node_modules/aws-sdk/**
+    - node_modules/serverless-offline/**
+    - node_modules/serverless-dotenv-plugin/**
   include:
     - dist/**
     - config/**
 
-custom:
-  app:
-    version: v1
-  apiGateway:
-    authorizerId:
-      Fn:ImportValue: ApiGateway-${self:provider.stage}-authorizer
-
 functions:
-  getPosts:
-    handler: dist/handlers/posts.getPosts
+  application:
+    handler: dist/handlers/applicationHandler.handler
     events:
-      - http:
-          path: ${self:custom.app.version}/posts
-          method: get
+      - http: 
+          path: /
+          method: ANY
           cors: true
           authorizer:
             type: CUSTOM
-            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
-
-  getPost:
-    handler: dist/handlers/posts.getPost
-    events:
+            authorizerId: ${cf:api-gateway-dev.apiKeyAuthorizer}
       - http:
-          path: ${self:custom.app.version}/posts/{uuid}
-          method: get
+          path: /{proxy+}
+          method: ANY
           cors: true
           authorizer:
             type: CUSTOM
-            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
-
-  createPost:
-    handler: dist/handlers/posts.createPost
-    events:
-      - http:
-          path: ${self:custom.app.version}/posts
-          method: post
-          cors: true
-          authorizer:
-            type: CUSTOM
-            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
-
-  updatePost:
-    handler: dist/handlers/posts.updatePost
-    events:
-      - http:
-          path: ${self:custom.app.version}/posts/{uuid}
-          method: put
-          cors: true
-          authorizer:
-            type: CUSTOM
-            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
-
-  deletePost:
-    handler: dist/handlers/posts.deletePost
-    events:
-      - http:
-          path: ${self:custom.app.version}/posts/{uuid}
-          method: delete
-          cors: true
-          authorizer:
-            type: CUSTOM
-            authorizerId: ${cf:api-gateway-dev.apiGatewayRestApiAuthorizer}
+            authorizerId: ${cf:api-gateway-dev.apiKeyAuthorizer}
