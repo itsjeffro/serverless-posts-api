@@ -25,12 +25,11 @@ const versionController = new VersionController;
 /**
  * registered routes.
  */
-router.get('/', versionController.show);
-router.get('/posts', postController.list);
-router.get('/posts/:post', postController.show);
-router.delete('/posts/:post', postController.delete);
-router.put('/posts/:post', postController.update);
-router.post('/posts', postController.create);
+router.get('/v1/posts', postController.list);
+router.get('/v1/posts/:post', postController.show);
+router.delete('/v1/posts/:post', postController.delete);
+router.put('/v1/posts/:post', postController.update);
+router.post('/v1/posts', postController.create);
 
 app.use('/', router);
 

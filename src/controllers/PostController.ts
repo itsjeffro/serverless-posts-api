@@ -6,7 +6,17 @@ export default class PostController {
    */
   public list(request: any, response: Response): any {
     response.json({
-      data: [],
+      data: [
+        {
+          id: 'b48dd43d-5b19-4bce-99a8-8ffabc52db84',
+          title: 'My first post',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ultricies enim magna, aliquet tempor nunc congue vitae. Nunc convallis elementum accumsan. Proin sit amet blandit diam. Suspendisse condimentum congue suscipit. Phasellus id sodales augue. Sed massa nibh, feugiat vitae magna a, dignissim bibendum odio.',
+          userId: 'b86bb437-eec6-4df2-9c39-800e68f84fac',
+          createdAt: '2020-11-16T18:42:29+11:00',
+          updatedAt: '2020-11-16T18:42:29+11:00',
+          deletedAt: null,
+        }
+      ],
     })
   }
 
@@ -15,7 +25,13 @@ export default class PostController {
    */
   public show(request: any, response: Response): any {
     response.json({
-      title: "Example",
+      id: 'b48dd43d-5b19-4bce-99a8-8ffabc52db84',
+      title: 'My first post',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ultricies enim magna, aliquet tempor nunc congue vitae. Nunc convallis elementum accumsan. Proin sit amet blandit diam. Suspendisse condimentum congue suscipit. Phasellus id sodales augue. Sed massa nibh, feugiat vitae magna a, dignissim bibendum odio.',
+      userId: 'b86bb437-eec6-4df2-9c39-800e68f84fac',
+      createdAt: '2020-11-16T18:42:29+11:00',
+      updatedAt: '2020-11-16T18:42:29+11:00',
+      deletedAt: null,
     })
   }
 
@@ -33,7 +49,13 @@ export default class PostController {
    */
   public update(request: any, response: Response): any {
     response.json({
-      title: "Example updated",
+      id: 'b48dd43d-5b19-4bce-99a8-8ffabc52db84',
+      title: 'My first post',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ultricies enim magna, aliquet tempor nunc congue vitae. Nunc convallis elementum accumsan. Proin sit amet blandit diam. Suspendisse condimentum congue suscipit. Phasellus id sodales augue. Sed massa nibh, feugiat vitae magna a, dignissim bibendum odio.',
+      userId: 'b86bb437-eec6-4df2-9c39-800e68f84fac',
+      createdAt: '2020-11-16T18:42:29+11:00',
+      updatedAt: '2020-11-16T18:42:29+11:00',
+      deletedAt: null,
     });
   }
 
@@ -44,7 +66,13 @@ export default class PostController {
     response
       .status(201)
       .json({
-        title: "Example created",
+        id: 'b48dd43d-5b19-4bce-99a8-8ffabc52db84',
+        title: 'My first post',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ultricies enim magna, aliquet tempor nunc congue vitae. Nunc convallis elementum accumsan. Proin sit amet blandit diam. Suspendisse condimentum congue suscipit. Phasellus id sodales augue. Sed massa nibh, feugiat vitae magna a, dignissim bibendum odio.',
+        userId: 'b86bb437-eec6-4df2-9c39-800e68f84fac',
+        createdAt: '2020-11-16T18:42:29+11:00',
+        updatedAt: '2020-11-16T18:42:29+11:00',
+        deletedAt: null,
       });
   }
 }
