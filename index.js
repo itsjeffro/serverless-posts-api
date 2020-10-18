@@ -1,3 +1,7 @@
+if (process.env.STAGE === 'local') {
+  require("dotenv").config();
+}
+
 const app = require("./dist/app");
 
 app.listen(3000, () => {
