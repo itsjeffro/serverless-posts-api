@@ -1,4 +1,4 @@
-import { LoggerInterface } from "src/lib/Log/LoggerInterface";
+import { LoggerInterface } from "src/lib/Logger/LoggerInterface";
 import LambdaEventInterface from "src/lib/LambdaEvent/LambdaEventInterface";
 import DatabaseInterface from "src/lib/Database/DatabaseInteface";
 
