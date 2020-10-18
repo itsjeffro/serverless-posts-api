@@ -1,6 +1,5 @@
 import express, { Response } from "express";
 import PostController from "./controllers/PostController";
-import VersionController from "./controllers/VersionController";
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
@@ -20,7 +19,6 @@ router.use(awsServerlessExpressMiddleware.eventContext());
  * Instantiated controllers.
  */
 const postController = new PostController;
-const versionController = new VersionController;
 
 /**
  * registered routes.
