@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 
+/**
+ * Route configuration.
+ */
 const app = express();
 const router = express.Router();
 
@@ -13,9 +16,15 @@ router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(awsServerlessExpressMiddleware.eventContext());
 
+/**
+ * Instantiated controllers.
+ */
 const postController = new PostController;
 const versionController = new VersionController;
 
+/**
+ * registered routes.
+ */
 router.get('/', versionController.show);
 router.get('/posts', postController.list);
 router.get('/posts/:post', postController.show);
