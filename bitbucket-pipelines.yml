@@ -44,7 +44,6 @@ pipelines:
 
       - step:
           name: Deploy to production
-          trigger: manual
           script:
             - cp serverless-api.yml serverless.yml
             - npm i serverless -g
