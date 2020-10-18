@@ -1,29 +1,26 @@
-import LambdaEventInterface from "src/lib/LambdaEvent/LambdaEventInterface";
 import DatabaseInterface from "src/lib/Database/DatabaseInteface";
 
 const uuid = require("uuid/v4");
 
 class CreatePostService {
   db: DatabaseInterface;
-  lambdaEvent: LambdaEventInterface;
 
   /**
    * GetPostsService constructor.
    */
-  constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
+  constructor(db: DatabaseInterface) {
     this.db = db;
-    this.lambdaEvent = lambdaEvent;
   }
 
   /**
    * Creates one recored.
    */
-  async handle() {
+  async handle(body: any): Promise<any> {
     const request = [
       uuid(),
-      this.lambdaEvent.getBody('title'),
-      this.lambdaEvent.getBody('slug'),
-      this.lambdaEvent.getBody('content'),
+      body.title || null,
+      body.slug || null,
+      body.content || null,
       new Date,
       new Date,
     ];
