@@ -8,6 +8,7 @@ export default class LambdaEvent implements LambdaEventInterface
    * Defaults from the passed event.
    */
   public event = {
+    path: '',
     body: '',
     pathParameters: {},
     requestContext: {},
@@ -61,5 +62,12 @@ export default class LambdaEvent implements LambdaEventInterface
       this.event.requestContext,
       key
     );
+  }
+
+  /**
+   * Get requested path.
+   */
+  public getPath(): string {
+    return this.event.path || '';
   }
 }
