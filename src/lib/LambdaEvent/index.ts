@@ -36,7 +36,7 @@ export default class LambdaEvent implements LambdaEventInterface
    */
   public getBody(key?: string): object {
     try {
-      const data = JSON.parse(this.event.body);
+      const data = JSON.parse(this.event.body || '{}');
 
       return this.objectRepository.get(data, key);
     } catch (e) {
