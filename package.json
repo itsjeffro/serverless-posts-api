@@ -7,6 +7,8 @@
     "test": "jest",
     "build": "tsc",
     "watch": "tsc --watch",
+    "sls:start": "sls offline",
+    "express:start": "node index.js",
     "make:migration": "cross-env STAGE=local ./node_modules/.bin/knex migrate:make",
     "make:migration-queues": "node ./dist/services/MigrationsQueue/command.js",
     "migrate": "cross-env STAGE=local ./node_modules/.bin/knex migrate:latest",
