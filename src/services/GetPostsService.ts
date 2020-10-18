@@ -19,7 +19,7 @@ class GetPostsService {
     );
 
     return {
-      data: rows
+      rows: rows
     };
   }
 }
