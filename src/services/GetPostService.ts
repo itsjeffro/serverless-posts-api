@@ -1,32 +1,27 @@
-import LambdaEventInterface from "../lib/LambdaEvent/LambdaEventInterface";
 import DatabaseInterface from "../lib/Database/DatabaseInteface";
 import RecordNotFoundException from "../lib/Database/RecordNotFoundException";
 
 class GetPostService {
   db: DatabaseInterface;
-  lambdaEvent: LambdaEventInterface;
 
   /**
    * GetPostService constructor.
    */
-  constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
+  constructor(db: DatabaseInterface) {
     this.db = db;
-    this.lambdaEvent = lambdaEvent;
   }
 
   /**
    * Get one record.
    */
-  async handle() {
-    const id = this.lambdaEvent.getPathParameter('uuid');
-  
+  async handle(postId: string) {
     const [ rows ] = await this.db.execute(
       `SELECT * FROM posts WHERE uuid = ? LIMIT 1`, 
-      [ id ]
+      [ postId ]
     );
   
     if (rows.length === 0) {
-      throw new RecordNotFoundException(`No query results for IDs: ${id}`);
+      return null;
     }
   
     return rows[0];
