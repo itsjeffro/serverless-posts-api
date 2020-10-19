@@ -1,57 +1,43 @@
 import RecordNotFoundException from "../lib/Database/RecordNotFoundException";
-import LambdaEventInterface from "../lib/LambdaEvent/LambdaEventInterface";
 import { ResultInterface } from "src/lib/Database/ResultInterface";
 import DatabaseInterface from "src/lib/Database/DatabaseInteface";
 
 class UpdatePostService {
   db: DatabaseInterface;
-  lambdaEvent: LambdaEventInterface;
 
   /**
    * GetPostsService constructor.
-   * 
-   * @param {object} db
-   * @param {LambdaEventInterface} lambdaEvent
    */
-  constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
+  constructor(db: DatabaseInterface) {
     this.db = db;
-    this.lambdaEvent = lambdaEvent;
   }
 
   /**
    * Creates one recored.
-   * 
-   * @returns Promise<object>
    */
-  async handle() {
+  async handle(postId: string, body: any): Promise<any> {
     this.db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
       if (error) {
         throw error;
       }
     });
-
-    const id = this.lambdaEvent.getPathParameter("uuid");
   
     const request = [
-      this.lambdaEvent.getBody('title'),
-      this.lambdaEvent.getBody('slug'),
-      this.lambdaEvent.getBody('content'),
+      body.title || null,
+      body.slug || null,
+      body.content || null,
       new Date,
     ];
 
-    const result = await this.updatePostById(id, request);
+    const result = await this.updatePostById(postId, request);
 
     return result;
   }
 
   /**
    * Updates post.
-   *
-   * @param {string} id
-   * @param {any[]} request
-   * @returns {Promise<ResultInterface>}
    */
-  async updatePostById(id: string, request: any[]): Promise<ResultInterface> {
+  async updatePostById(id: string, request: any[]): Promise<ResultInterface | null> {
     const preparedParams = [
       ...request,
       id,
@@ -63,7 +49,7 @@ class UpdatePostService {
     );
   
     if (result.affectedRows === 0) {
-      throw new RecordNotFoundException(`No query results for IDs: ${id}`);
+      return null;
     }
 
     return result;

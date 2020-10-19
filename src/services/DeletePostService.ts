@@ -1,48 +1,30 @@
 import RecordNotFoundException from "../lib/Database/RecordNotFoundException";
-import LambdaEventInterface from "../lib/LambdaEvent/LambdaEventInterface";
 import DatabaseInterface from "src/lib/Database/DatabaseInteface";
 
 class DeletePostService {
   db: DatabaseInterface;
-  lambdaEvent: LambdaEventInterface;
 
   /**
    * GetPostsService constructor.
    */
-  constructor(db: DatabaseInterface, lambdaEvent: LambdaEventInterface) {
+  constructor(db: DatabaseInterface) {
     this.db = db;
-    this.lambdaEvent = lambdaEvent;
   }
 
   /**
    * Deletes one record.
    */
-  async handle() {
+  async handle(postId: string): Promise<any | null> {
     this.db.changeUser({ database: process.env.DB_DATABASE }, (error: any) => {
       if (error) {
         throw error;
       }
     });
 
-    const postId = this.lambdaEvent.getPathParameter("uuid");
-
-    let result = {
-      affectedRows: 0,
-      info: '',
-    };
-
-    result = await new Promise((resolve: any, reject: any) => {
-      this.db.execute("DELETE FROM posts WHERE uuid = ? LIMIT 1", [postId], (error: any, results: any, fields: any) => {
-        if (error) {
-          throw error;
-        }
-
-        resolve(results);
-      });
-    });
+    const [ result ] = await this.db.execute("DELETE FROM posts WHERE uuid = ? LIMIT 1", [ postId ]);
 
     if (result.affectedRows === 0) {
-      throw new RecordNotFoundException(`No query results for IDs: ${postId}`);
+      return null;
     }
 
     return result;
