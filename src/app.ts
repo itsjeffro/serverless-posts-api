@@ -23,11 +23,25 @@ const postController = new PostController;
 /**
  * registered routes.
  */
-router.get('/v1/posts', postController.list);
-router.get('/v1/posts/:post', postController.show);
-router.delete('/v1/posts/:post', postController.delete);
-router.put('/v1/posts/:post', postController.update);
-router.post('/v1/posts', postController.create);
+router.get('/v1/posts', (request, response) => {
+    postController.list(request, response);
+});
+
+router.get('/v1/posts/:post', (request, response) => {
+    postController.show(request, response);
+});
+
+router.delete('/v1/posts/:post', (request, response) => {
+    postController.delete(request, response);
+});
+
+router.put('/v1/posts/:post', (request, response) => {
+    postController.update(request, response);
+});
+
+router.post('/v1/posts', (request, response) => {
+    postController.create(request, response);
+});
 
 app.use('/', router);
 
