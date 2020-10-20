@@ -1,4 +1,4 @@
-# Microservice - Demo Service
+# Serverless - Posts API
 
 ## Introduction
 
@@ -11,7 +11,7 @@ Documentation:
 
 ## Shared resources
 
-A separate repository has been set up [here](https://github.com/itsjeffro/microservice-api-gateway) to provide shared resources. This way 
+A separate repository has been set up [here](https://github.com/itsjeffro/serverless-api-gateway) to provide shared resources. This way 
 teams can focus on having separate microservices per repository. All which will be able to reference the AG by its restApiId and rootResourceId.
 
 Shared resources:
